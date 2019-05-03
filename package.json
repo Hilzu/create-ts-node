@@ -2,43 +2,20 @@
   "name": "create-ts-node",
   "version": "0.0.0",
   "description": "Typescript Node starter",
-  "main": "build/index.js",
+  "bin": "./create.js",
   "author": "",
   "license": "Unlicense",
   "engines": {
-    "node": "^10.15.3"
+    "node": ">=8"
   },
   "scripts": {
-    "build": "npm-run-all clean tsc",
-    "clean": "rimraf build",
-    "format": "yarn prettier --write",
-    "lint": "eslint --ext js,jsx,ts,tsx .",
-    "nodemon": "nodemon --watch build",
-    "prettier": "prettier \"{.,src/**}/*.{css,html,js,jsx,json,ts,tsx,md,mdx,yml,yaml}\"",
-    "start": "node build/index.js",
-    "start:dev": "npm-run-all build --parallel tsc:watch nodemon",
-    "test": "npm-run-all lint test:format",
-    "test:format": "yarn prettier --check",
-    "tsc": "tsc",
-    "tsc:watch": "tsc --watch"
+    "format": "prettier --write \"{.,template/**}/*.{css,html,js,jsx,json,ts,tsx,md,mdx,yml,yaml}\""
   },
   "dependencies": {
-    "source-map-support": "^0.5.11"
+    "chalk": "^2.4.2"
   },
   "devDependencies": {
-    "@types/node": "^10.14.1",
-    "@typescript-eslint/eslint-plugin": "^1.4.2",
-    "@typescript-eslint/parser": "^1.4.2",
-    "eslint": "^5.15.2",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-import-resolver-typescript": "^1.1.1",
-    "eslint-plugin-import": "^2.16.0",
-    "nodemon": "^1.18.10",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^1.16.4",
-    "rimraf": "^2.6.3",
-    "typescript": "^3.3.3333"
+    "prettier": "1.17.0"
   },
   "prettier": {
     "trailingComma": "all"
