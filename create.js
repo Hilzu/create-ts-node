@@ -57,7 +57,7 @@ const create = async () => {
   const packageJson = JSON.parse(packageJsonFile);
   packageJson.name = projectName;
   packageJson.engines.node = `^${process.versions.node}`;
-  await writeFile(packageJsonPath, JSON.stringify(packageJson));
+  await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
 
   `
 Project created!
