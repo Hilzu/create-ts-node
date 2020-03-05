@@ -76,7 +76,7 @@ dependencies. Other useful scripts are:
     ${chalk.keyword("gray")(
       "# Run project in watch mode with automatic restarts on changes",
     )}
-    yarn start:dev
+    yarn dev
     ${chalk.keyword("gray")("# Run eslint and check code formatting")}
     yarn test
   `
