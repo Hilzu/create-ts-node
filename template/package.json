@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "npm-run-all clean tsc",
-    "clean": "rimraf build",
+    "clean": "rimraf dist",
     "format": "yarn prettier --write",
     "lint": "eslint --ext js,jsx,ts,tsx .",
     "nodemon": "nodemon --watch dist",
