@@ -2,24 +2,14 @@ module.exports = {
   root: true,
   extends: [
     "eslint:recommended",
-    "airbnb-base",
+    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
     "prettier",
+    "prettier/@typescript-eslint",
   ],
   parser: "@typescript-eslint/parser",
   plugins: ["import", "@typescript-eslint"],
-  settings: {
-    "import/resolver": {
-      typescript: {},
-    },
-  },
-  env: {
-    jest: true,
-  },
-  rules: {
-    "import/no-commonjs": "error",
-    "@typescript-eslint/indent": "off",
-    "no-useless-constructor": "off",
-    "@typescript-eslint/no-useless-constructor": "error",
-  },
 };
