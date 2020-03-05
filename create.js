@@ -62,7 +62,7 @@ const create = async () => {
   `
 Project created!
 
-You can now run "yarn install" in the directory to install the
+You can now run "yarn install" in the project directory to install the
 dependencies. Other useful scripts are:
 
     ${chalk.keyword("gray")("# Build project")}
