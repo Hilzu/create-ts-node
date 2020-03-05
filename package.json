@@ -6,7 +6,7 @@
   "author": "",
   "license": "Unlicense",
   "engines": {
-    "node": ">=8"
+    "node": ">=10.13.0"
   },
   "scripts": {
     "format": "prettier --write \"{.,template/**}/*.{css,html,js,jsx,json,ts,tsx,md,mdx,yml,yaml}\""
