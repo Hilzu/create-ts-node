@@ -14,7 +14,7 @@
     "format": "yarn prettier --write",
     "lint": "eslint --ext js,jsx,ts,tsx .",
     "nodemon": "nodemon --watch dist",
-    "prettier": "prettier \"{.,src/**}/*.{css,html,js,jsx,json,ts,tsx,md,mdx,yml,yaml}\"",
+    "prettier": "prettier --ignore-path .gitignore \"**/*.{css,html,js,jsx,json,ts,tsx,md,mdx,yml,yaml}\"",
     "start": "node dist/index.js",
     "start:dev": "npm-run-all build --parallel tsc:watch nodemon",
     "test": "npm-run-all lint test:format",
