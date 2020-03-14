@@ -11,14 +11,14 @@
   "scripts": {
     "build": "npm-run-all clean tsc",
     "clean": "rimraf dist",
-    "format": "yarn prettier --write",
+    "format": "PM_RUN prettier --write",
     "lint": "eslint --ext js,jsx,ts,tsx .",
     "nodemon": "nodemon --watch dist",
     "prettier": "prettier --ignore-path .gitignore \"**/*.{css,html,js,jsx,json,ts,tsx,md,mdx,yml,yaml}\"",
     "start": "node dist/index.js",
     "dev": "npm-run-all build --parallel tsc:watch nodemon",
     "test": "npm-run-all lint test:format",
-    "test:format": "yarn prettier --check",
+    "test:format": "PM_RUN prettier --check",
     "tsc": "tsc",
     "tsc:watch": "tsc --watch"
   },

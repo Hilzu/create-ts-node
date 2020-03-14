@@ -18,6 +18,12 @@ const cwd = process.cwd();
 const projectName = explicitName || path.basename(cwd);
 const projectPath = explicitName ? path.join(cwd, projectName) : cwd;
 const templatePath = path.join(__dirname, "template");
+const packageManagerType = (process.env.npm_execpath || "").endsWith("yarn.js")
+  ? "yarn"
+  : "npm";
+const packageManagerRun = packageManagerType === "npm" ? "npm run" : "yarn";
+const packageManagerRunScript =
+  packageManagerType === "npm" ? "npm run --" : "yarn run";
 
 const log = (msg, ...args) => {
   console.log(`create-ts-node: ${msg}`, ...args);
@@ -40,6 +46,11 @@ const copyFiles = async () => {
   }
 };
 
+const fromEntries = entries =>
+  entries.reduce((newObj, [key, value]) => ({ ...newObj, [key]: value }), {});
+
+const mapObject = (obj, mapper) => fromEntries(Object.entries(obj).map(mapper));
+
 const create = async () => {
   log(`Creating project ${projectName}`);
   try {
@@ -55,30 +66,37 @@ const create = async () => {
   const packageJsonPath = path.join(projectPath, "package.json");
   const packageJsonFile = await readFile(packageJsonPath);
   const packageJson = JSON.parse(packageJsonFile);
+
   packageJson.name = projectName;
   packageJson.engines.node = `^${process.versions.node}`;
+  packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
+    key,
+    value.replace("PM_RUN", packageManagerRunScript),
+  ]);
+
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
 
+  console.log();
   `
 Project created!
 
-You can now run "yarn install" in the project directory to install the
+You can now run "${packageManagerType} install" in the project directory to install the
 dependencies. Other useful scripts are:
 
     ${chalk.keyword("gray")("# Build project")}
-    yarn build
+    ${packageManagerRun} build
     ${chalk.keyword("gray")("# Clean all build artefacts")}
-    yarn clean
+    ${packageManagerRun} clean
     ${chalk.keyword("gray")("# Automatically format code using prettier")}
-    yarn format
+    ${packageManagerRun} format
     ${chalk.keyword("gray")("# Run project in production mode")}
-    yarn start
+    ${packageManagerRun} start
     ${chalk.keyword("gray")(
       "# Run project in watch mode with automatic restarts on changes",
     )}
-    yarn dev
+    ${packageManagerRun} dev
     ${chalk.keyword("gray")("# Run eslint and check code formatting")}
-    yarn test
+    ${packageManagerRun} test
   `
     .trim()
     .split("\n")

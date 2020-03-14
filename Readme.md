@@ -7,5 +7,11 @@ Project template for TypeScript projects. Has TypeScript build setup using moder
 Create a new project by running this command:
 
 ```bash
+# Using npm
+npm init ts-node new-app
+# Or with npx
+npx create-ts-node new-app
+
+# Using yarn
 yarn create ts-node new-app
 ```
