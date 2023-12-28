@@ -34,9 +34,9 @@ const debug = debuglog("create-ts-node");
 const copyFiles = async () => {
   const templateFiles = await readDir(templatePath);
   for (const file of templateFiles) {
-    if (file === ".npmignore") continue;
     const templateFilePath = pathJoin(templatePath, file);
-    const projectFilePath = pathJoin(projectPath, file);
+    const projectFile = file.startsWith("_") ? file.slice(1) : file;
+    const projectFilePath = pathJoin(projectPath, projectFile);
     const stats = await stat(templateFilePath);
 
     if (stats.isDirectory()) {
