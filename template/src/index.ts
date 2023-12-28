@@ -1,3 +1,3 @@
-import "source-map-support/register";
+import { message } from "./message.js";
 
-console.log("Hello world!");
+console.log(message);
