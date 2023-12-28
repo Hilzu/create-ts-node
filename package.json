@@ -1,13 +1,25 @@
 {
   "name": "create-ts-node",
   "version": "0.2.3",
-  "description": "Typescript Node starter",
+  "description": "Create a new Node.js project that uses Typescript, ESLint and Prettier",
+  "author": "Santeri Hiltunen <github@me.hilzu.moe> (https://hilzu.moe/)",
+  "license": "Unlicense",
+  "keywords": [
+    "create",
+    "init",
+    "typescript",
+    "node"
+  ],
+  "homepage": "https://github.com/Hilzu/create-ts-node#create-ts-node",
+  "bugs": "https://github.com/Hilzu/create-ts-node/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hilzu/create-ts-node.git"
+  },
+  "type": "module",
   "bin": {
     "create-ts-node": "create.mjs"
   },
-  "author": "Santeri Hiltunen <github@me.hilzu.moe> (https://hilzu.moe/)",
-  "license": "Unlicense",
-  "type": "module",
   "engines": {
     "node": "^18.12.0 || >=20.9.0"
   },
