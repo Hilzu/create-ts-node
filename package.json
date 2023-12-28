@@ -2,7 +2,9 @@
   "name": "create-ts-node",
   "version": "0.2.3",
   "description": "Typescript Node starter",
-  "bin": "./create.mjs",
+  "bin": {
+    "create-ts-node": "create.mjs"
+  },
   "author": "Santeri Hiltunen <github@me.hilzu.moe> (https://hilzu.moe/)",
   "license": "Unlicense",
   "type": "module",
