@@ -11,6 +11,7 @@ import {
 } from "node:fs/promises";
 import { basename as baseName, join as pathJoin } from "node:path";
 import { fileURLToPath } from "node:url";
+import { debuglog } from "node:util";
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
 const explicitName = process.argv[2];
@@ -27,6 +28,8 @@ const packageManagerRunScript =
 const log = (msg, ...args) => {
   console.log(`create-ts-node: ${msg}`, ...args);
 };
+
+const debug = debuglog("create-ts-node");
 
 const copyFiles = async () => {
   const templateFiles = await readDir(templatePath);
@@ -56,6 +59,13 @@ const create = async () => {
     if (err.code !== "EEXIST") {
       throw err;
     }
+  }
+
+  const existingFiles = await readDir(projectPath);
+  if (existingFiles.length > 0) {
+    throw new Error(
+      `Can't create project in ${projectPath} because it's not empty.`,
+    );
   }
 
   await copyFiles();
@@ -100,6 +110,10 @@ dependencies. Other useful scripts are:
     .forEach((line) => log(line));
 };
 
-create().catch((err) => {
-  console.error("create-ts-node: Failed to create project!", err);
-});
+try {
+  await create();
+} catch (err) {
+  console.error("create-ts-node:", err.message);
+  debug(err.stack);
+  process.exitCode = 1;
+}
