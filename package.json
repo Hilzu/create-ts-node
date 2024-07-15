@@ -8,7 +8,10 @@
     "create",
     "init",
     "typescript",
-    "node"
+    "node",
+    "template",
+    "starter",
+    "project"
   ],
   "homepage": "https://github.com/Hilzu/create-ts-node#create-ts-node",
   "bugs": "https://github.com/Hilzu/create-ts-node/issues",
