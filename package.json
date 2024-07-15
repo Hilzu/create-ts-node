@@ -30,7 +30,8 @@
     "format": "prettier --write .",
     "test": "concurrently --group npm:test:*",
     "test:format": "prettier --check .",
-    "test:lint": "eslint ."
+    "test:lint": "eslint .",
+    "update-template-deps": "(cd template && npx npm-check-updates@latest --upgrade)"
   },
   "dependencies": {
     "chalk": "^5.3.0"
