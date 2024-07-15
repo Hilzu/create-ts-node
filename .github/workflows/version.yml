@@ -29,5 +29,14 @@ jobs:
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
-      - run: npm version ${{ github.event.inputs.version }}
-      - run: git push --follow-tags
+      - name: Bump version
+        id: npm-version
+        run: echo "version=`npm version ${{ github.event.inputs.version }}`" >> "$GITHUB_OUTPUT"
+      - name: Push commit and tag
+        run: git push --follow-tags
+      - name: Create release in GitHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.npm-version.outputs.version }}
+        run: |
+          gh release create "$TAG" --verify-tag --generate-notes
