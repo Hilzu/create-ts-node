@@ -19,3 +19,29 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm test
+
+  create:
+    name: Create a project with npm
+    strategy:
+      matrix:
+        os: [ubuntu, windows, macos]
+        node-version: [18.x, 20.x, 22.x]
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm install --production
+      - run: npm link
+
+      - run: npm init ts-node new-project
+        working-directory: ${{ runner.temp }}
+      - run: npm install
+        working-directory: ${{ runner.temp }}/new-project
+      - run: npm run build
+        working-directory: ${{ runner.temp }}/new-project
+      - run: npm test
+        working-directory: ${{ runner.temp }}/new-project
