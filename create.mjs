@@ -23,8 +23,6 @@ const templatePath = pathJoin(dirname, "template");
 const packageManagerType =
   (process.env.npm_execpath || "").endsWith("yarn.js") ? "yarn" : "npm";
 const packageManagerRun = packageManagerType === "npm" ? "npm run" : "yarn";
-const packageManagerRunScript =
-  packageManagerType === "npm" ? "npm run --" : "yarn run";
 
 const log = (msg, ...args) => {
   console.log(`create-ts-node: ${msg}`, ...args);
@@ -91,7 +89,7 @@ const create = async () => {
   packageJson.engines.node = `>=${process.versions.node}`;
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
-    value.replace("PM_RUN", packageManagerRunScript),
+    value.replaceAll("PM_RUN", packageManagerRun),
   ]);
 
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
