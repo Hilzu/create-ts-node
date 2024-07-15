@@ -12,6 +12,7 @@ import {
 import { basename as baseName, join as pathJoin } from "node:path";
 import { fileURLToPath } from "node:url";
 import { debuglog } from "node:util";
+import { EOL } from "os";
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
 const explicitName = process.argv[2];
@@ -31,6 +32,14 @@ const log = (msg, ...args) => {
 
 const debug = debuglog("create-ts-node");
 
+const lineEndRegex = /\r\n|\r|\n/g;
+
+const normalizeLineEndings = async (path) => {
+  const file = await readFile(path, { encoding: "utf-8" });
+  const normalized = file.replaceAll(lineEndRegex, EOL);
+  await writeFile(path, normalized);
+};
+
 const copyFiles = async () => {
   const templateFiles = await readDir(templatePath);
   for (const file of templateFiles) {
@@ -45,6 +54,7 @@ const copyFiles = async () => {
       templateFiles.push(...newFiles.map((f) => pathJoin(file, f)));
     } else if (stats.isFile()) {
       await copyFile(templateFilePath, projectFilePath);
+      await normalizeLineEndings(projectFilePath);
     }
   }
 };
@@ -72,7 +82,9 @@ const create = async () => {
   await copyFiles();
 
   const packageJsonPath = pathJoin(projectPath, "package.json");
-  const packageJsonFile = await readFile(packageJsonPath);
+  const packageJsonFile = await readFile(packageJsonPath, {
+    encoding: "utf-8",
+  });
   const packageJson = JSON.parse(packageJsonFile);
 
   packageJson.name = projectName;
@@ -82,7 +94,8 @@ const create = async () => {
     value.replace("PM_RUN", packageManagerRunScript),
   ]);
 
-  await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
+  await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
+  await normalizeLineEndings(packageJsonPath);
 
   console.log();
   `
