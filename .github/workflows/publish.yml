@@ -37,5 +37,5 @@ jobs:
         with:
           node-version: "22.x"
       - run: npm create ts-node@latest npm-project
-      - run: yarn create ts-node@latest yarn-project
-      - run: pnpm create ts-node@latest pnpm-project
+      - run: yarn create ts-node yarn-project
+      - run: pnpm create ts-node pnpm-project
