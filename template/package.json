@@ -15,7 +15,7 @@
     "format": "PM_RUN prettier --write",
     "lint": "eslint .",
     "nodemon": "nodemon --watch dist",
-    "prettier": "prettier --ignore-path .gitignore .",
+    "prettier": "prettier .",
     "start": "node --enable-source-maps dist/index.js",
     "dev": "npm-run-all build --parallel tsc:watch nodemon",
     "test": "npm-run-all lint test:format",

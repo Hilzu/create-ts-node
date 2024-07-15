@@ -1,4 +1,4 @@
-name: Node.js CI
+name: CI
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Run tests
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,27 +21,40 @@ jobs:
       - run: npm test
 
   create:
-    name: Create a project with npm
+    name: Create
     strategy:
       matrix:
         os: [ubuntu, windows, macos]
         node-version: [18.x, 20.x, 22.x]
+        package-manager: [npm, yarn, pnpm]
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        if: matrix.package-manager == 'pnpm'
+        with:
+          version: 9
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: npm
       - run: npm install --production
-      - run: npm link
+      - run: npm install --global .
 
-      - run: npm init ts-node new-project
+      - name: Create empty package.json for pnpm
+        run: |
+          with open("package.json", "w") as f:
+            f.write('{}')
+        shell: python
         working-directory: ${{ runner.temp }}
-      - run: npm install
+        if: matrix.package-manager == 'pnpm'
+      - run: ${{ matrix.package-manager }} exec create-ts-node new-project
+        working-directory: ${{ runner.temp }}
+      - run: ${{ matrix.package-manager }} install
         working-directory: ${{ runner.temp }}/new-project
-      - run: npm run build
+      - run: ${{ matrix.package-manager }} run build
         working-directory: ${{ runner.temp }}/new-project
-      - run: npm test
+      - run: ${{ matrix.package-manager }} test
         working-directory: ${{ runner.temp }}/new-project
