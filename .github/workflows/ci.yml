@@ -24,10 +24,12 @@ jobs:
     name: Create
     strategy:
       matrix:
-        os: [ubuntu, windows, macos]
+        os: [ubuntu, macos, windows]
         node-version: [18.x, 20.x, 22.x]
         package-manager: [npm, yarn, pnpm]
     runs-on: ${{ matrix.os }}-latest
+    env:
+      NODE_DEBUG: create-ts-node
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -39,19 +41,36 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
-      - run: npm install --production
-      - run: npm install --global .
+      - run: ${{ matrix.package-manager }} install
+        env:
+          NODE_ENV: production
 
-      - name: Create empty package.json for pnpm
+      - run: npm install --global .
+        if: matrix.package-manager == 'npm'
+      - run: npx create-ts-node new-project
+        if: matrix.package-manager == 'npm'
+        working-directory: ${{ runner.temp }}
+
+      - run: yarn link
+        if: matrix.package-manager == 'yarn'
+      - run: yarn create ts-node new-project
+        if: matrix.package-manager == 'yarn'
+        working-directory: ${{ runner.temp }}
+
+      - name: Create package.json for pnpm
         run: |
-          with open("package.json", "w") as f:
+          with open('package.json', 'w') as f:
             f.write('{}')
         shell: python
-        working-directory: ${{ runner.temp }}
         if: matrix.package-manager == 'pnpm'
-      - run: ${{ matrix.package-manager }} exec create-ts-node new-project
         working-directory: ${{ runner.temp }}
+      - run: pnpm link ${{ github.workspace }}
+        if: matrix.package-manager == 'pnpm'
+        working-directory: ${{ runner.temp }}
+      - run: pnpm exec create-ts-node new-project
+        if: matrix.package-manager == 'pnpm'
+        working-directory: ${{ runner.temp }}
+
       - run: ${{ matrix.package-manager }} install
         working-directory: ${{ runner.temp }}/new-project
       - run: ${{ matrix.package-manager }} run build
