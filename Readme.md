@@ -10,9 +10,9 @@ Create a new project by running this command:
 
 ```bash
 # Using npm
-npm init ts-node new-app
+npm init ts-node@latest new-app
 # Or with npx
-npx create-ts-node new-app
+npx create-ts-node@latest new-app
 
 # Using yarn
 yarn create ts-node new-app
