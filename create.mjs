@@ -95,6 +95,9 @@ const create = async () => {
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
   await normalizeLineEndings(packageJsonPath);
 
+  const readmePath = pathJoin(projectPath, "README.md");
+  await writeFile(readmePath, `# ${projectName}${EOL}`);
+
   console.log();
   `
 Project created!
