@@ -19,6 +19,7 @@
     "test": "concurrently --group npm:test:*",
     "test:format": "prettier --check .",
     "test:lint": "eslint .",
+    "test:types": "tsc --noEmit",
     "tsc:watch": "tsc --watch"
   },
   "devDependencies": {
