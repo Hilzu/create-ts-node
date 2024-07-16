@@ -10,7 +10,8 @@
     "node": ""
   },
   "scripts": {
-    "build": "PM_RUN clean && tsc",
+    "build": "PM_RUN clean && PM_RUN build:ts",
+    "build:ts": "tsc",
     "clean": "rimraf dist",
     "dev": "PM_RUN build && concurrently npm:tsc:watch npm:nodemon",
     "format": "prettier --write .",
