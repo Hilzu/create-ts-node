@@ -1,3 +1,6 @@
-import { message } from "./message.js";
+import { server } from "./server.js";
+import { port } from "./config.js";
 
-console.log(message);
+server.listen(port, () => {
+  console.log("Server listening", server.address());
+});
