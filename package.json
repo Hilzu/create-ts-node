@@ -11,7 +11,9 @@
     "node",
     "template",
     "starter",
-    "project"
+    "project",
+    "boilerplate",
+    "esm"
   ],
   "homepage": "https://github.com/Hilzu/create-ts-node#create-ts-node",
   "bugs": "https://github.com/Hilzu/create-ts-node/issues",
