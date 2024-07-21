@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import chalk from "chalk";
 import {
   copyFile,
@@ -12,24 +10,18 @@ import {
 import { basename as baseName, join as pathJoin } from "node:path";
 import { argv, env, cwd as processCwd, versions } from "node:process";
 import { fileURLToPath } from "node:url";
-import { debuglog } from "node:util";
 import { EOL } from "node:os";
+import { log } from "./util.mjs";
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
 const explicitName = argv[2];
 const cwd = processCwd();
 const projectName = explicitName || baseName(cwd);
 const projectPath = explicitName ? pathJoin(cwd, projectName) : cwd;
-const templatePath = pathJoin(dirname, "template");
+const templatePath = pathJoin(dirname, "..", "template");
 const packageManagerType =
   (env.npm_execpath || "").endsWith("yarn.js") ? "yarn" : "npm";
 const packageManagerRun = packageManagerType === "npm" ? "npm run" : "yarn";
-
-const log = (msg, ...args) => {
-  console.log(`create-ts-node: ${msg}`, ...args);
-};
-
-const debug = debuglog("create-ts-node");
 
 const lineEndRegex = /\r\n|\r|\n/g;
 
@@ -61,7 +53,7 @@ const copyFiles = async () => {
 const mapObject = (obj, mapper) =>
   Object.fromEntries(Object.entries(obj).map(mapper));
 
-const main = async () => {
+export const create = async () => {
   log(`Creating project ${projectName}`);
   try {
     await mkdir(projectPath);
@@ -125,11 +117,3 @@ dependencies. Other useful scripts are:
     .split("\n")
     .forEach((line) => log(line));
 };
-
-try {
-  await main();
-} catch (err) {
-  console.error("create-ts-node:", err.message);
-  debug(err.stack);
-  process.exitCode = 1;
-}
