@@ -34,6 +34,7 @@
     "test": "concurrently --group npm:test:*",
     "test:format": "prettier --check .",
     "test:lint": "eslint .",
+    "test:node": "node --test",
     "update-template-deps": "(cd template && npx npm-check-updates@latest --upgrade)"
   },
   "dependencies": {

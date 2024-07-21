@@ -14,14 +14,22 @@ import { EOL } from "node:os";
 import { log } from "./util.mjs";
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
-const explicitName = argv[2];
-const cwd = processCwd();
-const projectName = explicitName || baseName(cwd);
-const projectPath = explicitName ? pathJoin(cwd, projectName) : cwd;
 const templatePath = pathJoin(dirname, "..", "template");
 const packageManagerType =
   (env.npm_execpath || "").endsWith("yarn.js") ? "yarn" : "npm";
 const packageManagerRun = packageManagerType === "npm" ? "npm run" : "yarn";
+
+export const deriveProjectNameAndPath = (nameArg, cwd = processCwd()) => {
+  const nameFromCwd = !nameArg || nameArg === ".";
+  const projectName = nameFromCwd ? baseName(cwd) : nameArg;
+  let projectPath;
+  if (nameFromCwd) projectPath = cwd;
+  else {
+    const dir = nameArg.startsWith("@") ? nameArg.split("/")[1] : nameArg;
+    projectPath = pathJoin(cwd, dir);
+  }
+  return { projectName, projectPath };
+};
 
 const lineEndRegex = /\r\n|\r|\n/g;
 
@@ -31,7 +39,7 @@ const normalizeLineEndings = async (path) => {
   await writeFile(path, normalized);
 };
 
-const copyFiles = async () => {
+const copyFiles = async (projectPath) => {
   const templateFiles = await readDir(templatePath);
   for (const file of templateFiles) {
     const templateFilePath = pathJoin(templatePath, file);
@@ -54,6 +62,7 @@ const mapObject = (obj, mapper) =>
   Object.fromEntries(Object.entries(obj).map(mapper));
 
 export const create = async () => {
+  const { projectName, projectPath } = deriveProjectNameAndPath(argv[2]);
   log(`Creating project ${projectName}`);
   try {
     await mkdir(projectPath);
@@ -70,7 +79,7 @@ export const create = async () => {
     );
   }
 
-  await copyFiles();
+  await copyFiles(projectPath);
 
   const packageJsonPath = pathJoin(projectPath, "package.json");
   const packageJsonFile = await readFile(packageJsonPath, {
