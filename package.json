@@ -23,8 +23,9 @@
   },
   "type": "module",
   "bin": {
-    "create-ts-node": "create.mjs"
+    "create-ts-node": "src/bin.mjs"
   },
+  "main": "src/main.mjs",
   "engines": {
     "node": "^18.12.0 || >=20.9.0"
   },
@@ -33,6 +34,7 @@
     "test": "concurrently --group npm:test:*",
     "test:format": "prettier --check .",
     "test:lint": "eslint .",
+    "test:node": "node --test",
     "update-template-deps": "(cd template && npx npm-check-updates@latest --upgrade)"
   },
   "dependencies": {

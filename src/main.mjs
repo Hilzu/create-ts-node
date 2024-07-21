@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import chalk from "chalk";
 import {
   copyFile,
@@ -10,25 +8,28 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { basename as baseName, join as pathJoin } from "node:path";
+import { argv, env, cwd as processCwd, versions } from "node:process";
 import { fileURLToPath } from "node:url";
-import { debuglog } from "node:util";
-import { EOL } from "os";
+import { EOL } from "node:os";
+import { log } from "./util.mjs";
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
-const explicitName = process.argv[2];
-const cwd = process.cwd();
-const projectName = explicitName || baseName(cwd);
-const projectPath = explicitName ? pathJoin(cwd, projectName) : cwd;
-const templatePath = pathJoin(dirname, "template");
+const templatePath = pathJoin(dirname, "..", "template");
 const packageManagerType =
-  (process.env.npm_execpath || "").endsWith("yarn.js") ? "yarn" : "npm";
+  (env.npm_execpath || "").endsWith("yarn.js") ? "yarn" : "npm";
 const packageManagerRun = packageManagerType === "npm" ? "npm run" : "yarn";
 
-const log = (msg, ...args) => {
-  console.log(`create-ts-node: ${msg}`, ...args);
+export const deriveProjectNameAndPath = (nameArg, cwd = processCwd()) => {
+  const nameFromCwd = !nameArg || nameArg === ".";
+  const projectName = nameFromCwd ? baseName(cwd) : nameArg;
+  let projectPath;
+  if (nameFromCwd) projectPath = cwd;
+  else {
+    const dir = nameArg.startsWith("@") ? nameArg.split("/")[1] : nameArg;
+    projectPath = pathJoin(cwd, dir);
+  }
+  return { projectName, projectPath };
 };
-
-const debug = debuglog("create-ts-node");
 
 const lineEndRegex = /\r\n|\r|\n/g;
 
@@ -38,7 +39,7 @@ const normalizeLineEndings = async (path) => {
   await writeFile(path, normalized);
 };
 
-const copyFiles = async () => {
+const copyFiles = async (projectPath) => {
   const templateFiles = await readDir(templatePath);
   for (const file of templateFiles) {
     const templateFilePath = pathJoin(templatePath, file);
@@ -60,7 +61,8 @@ const copyFiles = async () => {
 const mapObject = (obj, mapper) =>
   Object.fromEntries(Object.entries(obj).map(mapper));
 
-const create = async () => {
+export const create = async () => {
+  const { projectName, projectPath } = deriveProjectNameAndPath(argv[2]);
   log(`Creating project ${projectName}`);
   try {
     await mkdir(projectPath);
@@ -77,7 +79,7 @@ const create = async () => {
     );
   }
 
-  await copyFiles();
+  await copyFiles(projectPath);
 
   const packageJsonPath = pathJoin(projectPath, "package.json");
   const packageJsonFile = await readFile(packageJsonPath, {
@@ -86,7 +88,7 @@ const create = async () => {
   const packageJson = JSON.parse(packageJsonFile);
 
   packageJson.name = projectName;
-  packageJson.engines.node = `>=${process.versions.node}`;
+  packageJson.engines.node = `>=${versions.node}`;
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
     value.replaceAll("PM_RUN", packageManagerRun),
@@ -124,11 +126,3 @@ dependencies. Other useful scripts are:
     .split("\n")
     .forEach((line) => log(line));
 };
-
-try {
-  await create();
-} catch (err) {
-  console.error("create-ts-node:", err.message);
-  debug(err.stack);
-  process.exitCode = 1;
-}
