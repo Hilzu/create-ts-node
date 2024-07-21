@@ -15,7 +15,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.5.1
           cache: "npm"
       - run: npm ci
       - run: npm test
@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu, macos, windows]
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [18.x, 20.x, 22.5.1]
         package-manager: [npm, yarn, pnpm]
     runs-on: ${{ matrix.os }}-latest
     env:
