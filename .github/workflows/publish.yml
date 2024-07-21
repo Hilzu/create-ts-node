@@ -25,6 +25,9 @@ jobs:
   test:
     name: Test published package
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package-manager: [npm, yarn, pnpm]
     needs:
       - publish
     steps:
@@ -32,10 +35,16 @@ jobs:
         name: Install pnpm
         with:
           version: "9"
+        if: matrix.package-manager == 'pnpm'
       - name: Use Node.js 22.x
         uses: actions/setup-node@v4
         with:
           node-version: "22.5.1"
-      - run: npm create ts-node@latest npm-project
-      - run: yarn create ts-node yarn-project
-      - run: pnpm create ts-node pnpm-project
+      - name: Create project
+        run: ${{ matrix.package-manager }} create ts-node project
+      - name: Run build
+        run: ${{ matrix.package-manager }} run build
+        working-directory: project
+      - name: Run tests
+        run: ${{ matrix.package-manager }} test
+        working-directory: project
