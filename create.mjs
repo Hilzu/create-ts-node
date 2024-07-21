@@ -61,7 +61,7 @@ const copyFiles = async () => {
 const mapObject = (obj, mapper) =>
   Object.fromEntries(Object.entries(obj).map(mapper));
 
-const create = async () => {
+const main = async () => {
   log(`Creating project ${projectName}`);
   try {
     await mkdir(projectPath);
@@ -127,7 +127,7 @@ dependencies. Other useful scripts are:
 };
 
 try {
-  await create();
+  await main();
 } catch (err) {
   console.error("create-ts-node:", err.message);
   debug(err.stack);
