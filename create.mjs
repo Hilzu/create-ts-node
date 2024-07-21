@@ -10,18 +10,19 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { basename as baseName, join as pathJoin } from "node:path";
+import { argv, env, cwd as processCwd, versions } from "node:process";
 import { fileURLToPath } from "node:url";
 import { debuglog } from "node:util";
-import { EOL } from "os";
+import { EOL } from "node:os";
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
-const explicitName = process.argv[2];
-const cwd = process.cwd();
+const explicitName = argv[2];
+const cwd = processCwd();
 const projectName = explicitName || baseName(cwd);
 const projectPath = explicitName ? pathJoin(cwd, projectName) : cwd;
 const templatePath = pathJoin(dirname, "template");
 const packageManagerType =
-  (process.env.npm_execpath || "").endsWith("yarn.js") ? "yarn" : "npm";
+  (env.npm_execpath || "").endsWith("yarn.js") ? "yarn" : "npm";
 const packageManagerRun = packageManagerType === "npm" ? "npm run" : "yarn";
 
 const log = (msg, ...args) => {
@@ -86,7 +87,7 @@ const create = async () => {
   const packageJson = JSON.parse(packageJsonFile);
 
   packageJson.name = projectName;
-  packageJson.engines.node = `>=${process.versions.node}`;
+  packageJson.engines.node = `>=${versions.node}`;
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
     value.replaceAll("PM_RUN", packageManagerRun),
