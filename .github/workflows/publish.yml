@@ -42,6 +42,9 @@ jobs:
           node-version: "22.5.1"
       - name: Create project
         run: ${{ matrix.package-manager }} create ts-node project
+      - name: Install project dependencies
+        run: ${{ matrix.package-manager }} install
+        working-directory: project
       - name: Run build
         run: ${{ matrix.package-manager }} run build
         working-directory: project
