@@ -40,7 +40,7 @@ For safety creation is not allowed in an existing directory unless it is empty.
 Scoped project names are supported, for example `@my-scope/new-app`.
 The directory name will be the same as the project name without the scope.
 
-## Support
+## Compatability and supported Node.js versions
 
 Windows, Linux and macOS are supported.
 
