@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 22.x
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5.1"
+          node-version: 22.x
           cache: "npm"
           registry-url: "https://registry.npmjs.org"
       - run: npm ci
@@ -36,10 +36,10 @@ jobs:
         with:
           version: "9"
         if: matrix.package-manager == 'pnpm'
-      - name: Use Node.js 22.x
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22.5.1"
+          node-version: 22.x
       - name: Create project
         run: ${{ matrix.package-manager }} create ts-node project
       - name: Install project dependencies
@@ -55,4 +55,5 @@ jobs:
         run: ${{ matrix.package-manager }} start &
         working-directory: project
       - name: Test app
-        run: curl --fail --silent --show-error --max-time 10 localhost:3000
+        run: curl --fail --silent --show-error --max-time 10 localhost:3000 | jq .
+        shell: bash

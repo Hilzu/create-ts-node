@@ -10,22 +10,44 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["18", "20", "22"]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.5.1
+          node-version: ${{ matrix.node-version }}.x
           cache: "npm"
-      - run: npm ci
-      - run: npm test
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test
+      - name: Install package
+        run: npm install --global .
+      - name: Create project
+        run: npx create-ts-node new-project
+        working-directory: ${{ runner.temp }}
+      - name: Install project dependencies
+        run: npm install
+        working-directory: ${{ runner.temp }}/new-project
+      - name: Run build
+        run: npm run build
+        working-directory: ${{ runner.temp }}/new-project
+      - name: Start app
+        run: npm start &
+        working-directory: ${{ runner.temp }}/new-project
+      - name: Test app
+        run: curl --fail --silent --show-error --max-time 10 localhost:3000 | jq .
+        shell: bash
 
   create:
     name: Create
     strategy:
       matrix:
         os: [ubuntu, macos, windows]
-        node-version: [18.x, 20.x, 22.5.1]
+        node-version: ["18", "20", "22"]
         package-manager: [npm, yarn, pnpm]
     runs-on: ${{ matrix.os }}-latest
     env:
@@ -36,11 +58,11 @@ jobs:
         name: Install pnpm
         if: matrix.package-manager == 'pnpm'
         with:
-          version: 9
+          version: "9"
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node-version }}.x
       - run: ${{ matrix.package-manager }} install
         env:
           NODE_ENV: production
