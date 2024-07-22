@@ -115,7 +115,9 @@ export const create = async () => {
   packageJson.engines.node = `>=${versions.node}`;
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
-    value.replaceAll("PM_RUN", packageManagerRun),
+    value
+      .replaceAll("PM_RUN", packageManagerRun)
+      .replaceAll("PM_NAME", packageManagerType),
   ]);
 
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
