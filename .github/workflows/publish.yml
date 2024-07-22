@@ -55,4 +55,5 @@ jobs:
         run: ${{ matrix.package-manager }} start &
         working-directory: project
       - name: Test app
-        run: curl --fail --silent --show-error --max-time 10 localhost:3000
+        run: curl --fail --silent --show-error --max-time 10 localhost:3000 | jq .
+        shell: bash
