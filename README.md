@@ -47,12 +47,13 @@ Windows, Linux and macOS are supported.
 npm, yarn and pnpm are the supported package managers.
 The template is automatically adjusted based on the package manager used.
 
-The latest version targets the latest LTS and current versions of Node.js.
+The latest version targets the active LTS and current version of Node.js.
 To create a project for an older version of Node.js, use an older version of this package.
 
 | Node.js version | Package version |
 | --------------- | --------------- |
-| 18.x            | latest          |
+| 20.x            | latest          |
+| 18.x            | ^0.4.0          |
 | 10.x            | ^0.2.0          |
 | 8.x             | ^0.1.0          |
 
