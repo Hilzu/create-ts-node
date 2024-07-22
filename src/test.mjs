@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { tmpdir } from "node:os";
 import { join as pathJoin } from "node:path";
-
-import { deriveProjectNameAndPath } from "./main.mjs";
+import { env } from "node:process";
+import { deriveProjectNameAndPath, determinePackageManager } from "./main.mjs";
 
 test("deriveProjectNameAndPath", async (t) => {
   const dir = tmpdir();
@@ -40,5 +40,31 @@ test("deriveProjectNameAndPath", async (t) => {
     const { projectName, projectPath } = call("@scope/test");
     assert.equal(projectName, "@scope/test");
     assert.equal(projectPath, pathJoin(dir, "test"));
+  });
+});
+
+test("determinePackageManager", async (t) => {
+  let npmUserAgent;
+  t.beforeEach(() => {
+    npmUserAgent = env.npm_config_user_agent;
+  });
+  t.afterEach(() => {
+    env.npm_config_user_agent = npmUserAgent;
+  });
+
+  await t.test("with npm", (_t) => {
+    env.npm_config_user_agent =
+      "npm/10.7.0 node/v18.20.4 linux x64 workspaces/false ci/github-actions";
+    assert.equal(determinePackageManager(), "npm");
+  });
+
+  await t.test("with yarn", (_t) => {
+    env.npm_config_user_agent = "yarn/1.22.22 npm/? node/v20.15.1 darwin arm64";
+    assert.equal(determinePackageManager(), "yarn");
+  });
+
+  await t.test("with pnpm", (_t) => {
+    env.npm_config_user_agent = "pnpm/9.6.0 npm/? node/v22.5.1 win32 x64";
+    assert.equal(determinePackageManager(), "pnpm");
   });
 });

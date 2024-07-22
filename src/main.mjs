@@ -19,7 +19,7 @@ const templatePath = pathJoin(__dirname, "..", "template");
 debug("__dirname", __dirname);
 debug("templatePath", templatePath);
 
-export const derivePackageManager = () => {
+export const determinePackageManager = () => {
   const npmUserAgent = env.npm_config_user_agent;
   debug("npmUserAgent", npmUserAgent);
   const npmExecPath = env.npm_execpath;
@@ -79,7 +79,7 @@ export const create = async () => {
   const { projectName, projectPath } = deriveProjectNameAndPath(argv[2]);
   debug("projectName", projectName);
   debug("projectPath", projectPath);
-  const packageManagerType = derivePackageManager();
+  const packageManagerType = determinePackageManager();
   debug("packageManagerType", packageManagerType);
   const packageManagerRun =
     packageManagerType === "npm" ? "npm run"
