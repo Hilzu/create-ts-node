@@ -51,3 +51,8 @@ jobs:
       - name: Run tests
         run: ${{ matrix.package-manager }} test
         working-directory: project
+      - name: Start app
+        run: ${{ matrix.package-manager }} start &
+        working-directory: project
+      - name: Test app
+        run: curl --fail --silent --show-error --max-time 10 localhost:3000
