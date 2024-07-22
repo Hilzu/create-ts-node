@@ -15,7 +15,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.5.1
+          node-version: 22.x
           cache: "npm"
       - run: npm ci
       - run: npm test
@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu, macos, windows]
-        node-version: [18.x, 20.x, 22.5.1]
+        node-version: ["18", "20", "22"]
         package-manager: [npm, yarn, pnpm]
     runs-on: ${{ matrix.os }}-latest
     env:
@@ -36,11 +36,11 @@ jobs:
         name: Install pnpm
         if: matrix.package-manager == 'pnpm'
         with:
-          version: 9
+          version: "9"
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node-version }}.x
       - run: ${{ matrix.package-manager }} install
         env:
           NODE_ENV: production
