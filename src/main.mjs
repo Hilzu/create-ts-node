@@ -8,7 +8,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { basename as baseName, join as pathJoin } from "node:path";
-import { argv, env, cwd as processCwd, versions } from "node:process";
+import { argv, env, cwd as processCwd } from "node:process";
 import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
 import { log, debug } from "./util.mjs";
@@ -112,7 +112,6 @@ export const create = async () => {
   const packageJson = JSON.parse(packageJsonFile);
 
   packageJson.name = projectName;
-  packageJson.engines.node = `>=${versions.node}`;
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
     value

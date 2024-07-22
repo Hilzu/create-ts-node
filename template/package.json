@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "engines": {
-    "node": ""
+    "node": "^20.9.0 || >=22.5.1"
   },
   "scripts": {
     "build": "PM_RUN clean && PM_RUN build:ts",
