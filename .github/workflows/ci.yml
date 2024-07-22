@@ -20,8 +20,26 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}.x
           cache: "npm"
-      - run: npm ci
-      - run: npm test
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test
+      - name: Install package
+        run: npm install --global .
+      - name: Create project
+        run: npx create-ts-node new-project
+        working-directory: ${{ runner.temp }}
+      - name: Install project dependencies
+        run: npm install
+        working-directory: ${{ runner.temp }}/new-project
+      - name: Run build
+        run: npm run build
+        working-directory: ${{ runner.temp }}/new-project
+      - name: Start app
+        run: npm start &
+        working-directory: ${{ runner.temp }}/new-project
+      - name: Test app
+        run: curl --fail --silent --show-error --max-time 10 localhost:3000
 
   create:
     name: Create
