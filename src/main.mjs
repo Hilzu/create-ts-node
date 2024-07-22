@@ -11,13 +11,27 @@ import { basename as baseName, join as pathJoin } from "node:path";
 import { argv, env, cwd as processCwd, versions } from "node:process";
 import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
-import { log } from "./util.mjs";
+import { log, debug } from "./util.mjs";
 
-const dirname = fileURLToPath(new URL(".", import.meta.url));
-const templatePath = pathJoin(dirname, "..", "template");
-const packageManagerType =
-  (env.npm_execpath || "").endsWith("yarn.js") ? "yarn" : "npm";
-const packageManagerRun = packageManagerType === "npm" ? "npm run" : "yarn";
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
+const templatePath = pathJoin(__dirname, "..", "template");
+
+debug("__dirname", __dirname);
+debug("templatePath", templatePath);
+
+export const derivePackageManager = () => {
+  const npmUserAgent = env.npm_config_user_agent;
+  debug("npmUserAgent", npmUserAgent);
+  const npmExecPath = env.npm_execpath;
+  debug("npmExecPath", npmExecPath);
+  const parent = env._;
+  debug("parent", parent);
+
+  if (!npmUserAgent) return "npm";
+  if (npmUserAgent.includes("yarn/")) return "yarn";
+  if (npmUserAgent.includes("pnpm/")) return "pnpm";
+  return "npm";
+};
 
 export const deriveProjectNameAndPath = (nameArg, cwd = processCwd()) => {
   const nameFromCwd = !nameArg || nameArg === ".";
@@ -63,7 +77,17 @@ const mapObject = (obj, mapper) =>
 
 export const create = async () => {
   const { projectName, projectPath } = deriveProjectNameAndPath(argv[2]);
+  debug("projectName", projectName);
+  debug("projectPath", projectPath);
+  const packageManagerType = derivePackageManager();
+  debug("packageManagerType", packageManagerType);
+  const packageManagerRun =
+    packageManagerType === "npm" ? "npm run"
+    : packageManagerType === "pnpm" ? "pnpm"
+    : "yarn";
+  debug("packageManagerRun", packageManagerRun);
   log(`Creating project ${projectName}`);
+
   try {
     await mkdir(projectPath);
   } catch (err) {
@@ -91,7 +115,9 @@ export const create = async () => {
   packageJson.engines.node = `>=${versions.node}`;
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
-    value.replaceAll("PM_RUN", packageManagerRun),
+    value
+      .replaceAll("PM_RUN", packageManagerRun)
+      .replaceAll("PM_NAME", packageManagerType),
   ]);
 
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
