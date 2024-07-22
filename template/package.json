@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "engines": {
-    "node": ""
+    "node": "^20.9.0 || >=22.5.1"
   },
   "scripts": {
     "build": "PM_RUN clean && PM_RUN build:ts",
@@ -33,7 +33,7 @@
     "eslint-config-prettier": "^9.1.0",
     "nodemon": "^3.1.4",
     "prettier": "3.3.3",
-    "rimraf": "^5.0.9",
+    "rimraf": "^6.0.1",
     "typescript": "~5.5.3",
     "typescript-eslint": "^7.16.1"
   }
