@@ -15,16 +15,23 @@ import { log, debug } from "./util.mjs";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const templatePath = pathJoin(__dirname, "..", "template");
-const packageManagerType =
-  (env.npm_execpath || "").endsWith("yarn.js") ? "yarn" : "npm";
-const packageManagerRun = packageManagerType === "npm" ? "npm run" : "yarn";
 
 debug("__dirname", __dirname);
 debug("templatePath", templatePath);
-debug("env.npm_execpath", env.npm_execpath);
-debug("env", env);
-debug("packageManagerType", packageManagerType);
-debug("packageManagerRun", packageManagerRun);
+
+export const derivePackageManager = () => {
+  const npmUserAgent = env.npm_config_user_agent;
+  debug("npmUserAgent", npmUserAgent);
+  const npmExecPath = env.npm_execpath;
+  debug("npmExecPath", npmExecPath);
+  const parent = env._;
+  debug("parent", parent);
+
+  if (!npmUserAgent) return "npm";
+  if (npmUserAgent.includes("yarn/")) return "yarn";
+  if (npmUserAgent.includes("pnpm/")) return "pnpm";
+  return "npm";
+};
 
 export const deriveProjectNameAndPath = (nameArg, cwd = processCwd()) => {
   const nameFromCwd = !nameArg || nameArg === ".";
@@ -70,7 +77,17 @@ const mapObject = (obj, mapper) =>
 
 export const create = async () => {
   const { projectName, projectPath } = deriveProjectNameAndPath(argv[2]);
+  debug("projectName", projectName);
+  debug("projectPath", projectPath);
+  const packageManagerType = derivePackageManager();
+  debug("packageManagerType", packageManagerType);
+  const packageManagerRun =
+    packageManagerType === "npm" ? "npm run"
+    : packageManagerType === "pnpm" ? "pnpm"
+    : "yarn";
+  debug("packageManagerRun", packageManagerRun);
   log(`Creating project ${projectName}`);
+
   try {
     await mkdir(projectPath);
   } catch (err) {
