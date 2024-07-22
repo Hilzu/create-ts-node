@@ -11,13 +11,20 @@ import { basename as baseName, join as pathJoin } from "node:path";
 import { argv, env, cwd as processCwd, versions } from "node:process";
 import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
-import { log } from "./util.mjs";
+import { log, debug } from "./util.mjs";
 
-const dirname = fileURLToPath(new URL(".", import.meta.url));
-const templatePath = pathJoin(dirname, "..", "template");
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
+const templatePath = pathJoin(__dirname, "..", "template");
 const packageManagerType =
   (env.npm_execpath || "").endsWith("yarn.js") ? "yarn" : "npm";
 const packageManagerRun = packageManagerType === "npm" ? "npm run" : "yarn";
+
+debug("__dirname", __dirname);
+debug("templatePath", templatePath);
+debug("env.npm_execpath", env.npm_execpath);
+debug("env", env);
+debug("packageManagerType", packageManagerType);
+debug("packageManagerRun", packageManagerRun);
 
 export const deriveProjectNameAndPath = (nameArg, cwd = processCwd()) => {
   const nameFromCwd = !nameArg || nameArg === ".";
