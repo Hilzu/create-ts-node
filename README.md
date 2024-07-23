@@ -52,7 +52,7 @@ To create a project for an older version of Node.js, use an older version of thi
 
 | Node.js version | Package version |
 | --------------- | --------------- |
-| 20.x            | latest          |
+| 20.x or greater | latest          |
 | 18.x            | ^0.4.0          |
 | 10.x            | ^0.2.0          |
 | 8.x             | ^0.1.0          |
