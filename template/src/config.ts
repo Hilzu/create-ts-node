@@ -1,6 +1,6 @@
 import { env } from "node:process";
 
-const getEnv = (key: string, defaultValue?: string): string => {
+export const getEnv = (key: string, defaultValue?: string): string => {
   const value = env[key];
   if (value === undefined) {
     if (defaultValue === undefined) {
