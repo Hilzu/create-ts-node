@@ -1,6 +1,6 @@
 {
   "name": "create-ts-node",
-  "version": "0.4.4",
+  "version": "1.0.0",
   "description": "Create a new Node.js project that uses Typescript, ESLint and Prettier",
   "author": "Santeri Hiltunen <github@me.hilzu.moe> (https://hilzu.moe/)",
   "license": "Unlicense",
