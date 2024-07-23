@@ -99,3 +99,5 @@ jobs:
         working-directory: ${{ runner.temp }}/new-project
       - run: ${{ matrix.package-manager }} test
         working-directory: ${{ runner.temp }}/new-project
+      - run: ${{ matrix.package-manager }} run format
+        working-directory: ${{ runner.temp }}/new-project
