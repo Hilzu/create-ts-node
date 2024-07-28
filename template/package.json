@@ -23,8 +23,8 @@
     "test:format": "prettier --check .",
     "test:lint": "eslint .",
     "test:node": "node --import ./test/setup.mjs --test --test-reporter spec",
-    "test:types": "tsc --noEmit",
-    "tsc:watch": "tsc --watch --noEmit --preserveWatchOutput"
+    "test:types": "tsc --noEmit --pretty",
+    "tsc:watch": "tsc --watch --noEmit --preserveWatchOutput --pretty"
   },
   "devDependencies": {
     "@eslint/js": "^8.57.0",

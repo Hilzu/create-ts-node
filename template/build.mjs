@@ -11,6 +11,7 @@ const {
 
 const options = {
   logLevel: "info",
+  color: true,
 
   entryPoints: ["src/**"],
   outdir: "dist",
