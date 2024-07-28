@@ -41,6 +41,17 @@ jobs:
       - name: Test app
         run: curl --fail --silent --show-error --max-time 10 localhost:3000 | jq .
         shell: bash
+      - name: Stop app
+        run: kill $(lsof -t -i:3000)
+        shell: bash
+      - name: Start app in dev mode
+        run: npm run dev &
+        working-directory: ${{ runner.temp }}/new-project
+        env:
+          PORT: 3001
+      - name: Test app in dev mode
+        run: curl --fail --silent --show-error --max-time 10 localhost:3001 | jq .
+        shell: bash
 
   create:
     name: Create
