@@ -12,7 +12,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "sourceMap": true
+    "sourceMap": true,
+
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true
   },
   "include": ["src"]
 }

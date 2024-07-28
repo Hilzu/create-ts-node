@@ -11,10 +11,11 @@
   },
   "scripts": {
     "build": "PM_RUN clean && PM_RUN build:ts",
-    "build:ts": "tsc",
+    "build:ts": "node build.mjs",
+    "build:watch": "node build.mjs --watch",
     "clean": "rimraf dist",
-    "dev": "PM_RUN build && PM_RUN dev:start",
-    "dev:start": "concurrently --handle-input --names app,tsc PM_NAME:nodemon PM_NAME:tsc:watch",
+    "dev": "PM_RUN clean && PM_RUN dev:start",
+    "dev:start": "concurrently --handle-input --names app,tsc PM_NAME:nodemon PM_NAME:tsc:watch PM_NAME:build:watch",
     "format": "prettier --write .",
     "nodemon": "nodemon --watch dist",
     "start": "node --enable-source-maps .",
@@ -23,13 +24,14 @@
     "test:lint": "eslint .",
     "test:node": "node --import ./test/setup.mjs --test --test-reporter spec",
     "test:types": "tsc --noEmit",
-    "tsc:watch": "tsc --watch"
+    "tsc:watch": "tsc --watch --noEmit --preserveWatchOutput"
   },
   "devDependencies": {
     "@eslint/js": "^8.57.0",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^20.14.10",
     "concurrently": "^8.2.2",
+    "esbuild": "^0.23.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.8.0",
