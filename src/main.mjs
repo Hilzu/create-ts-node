@@ -79,13 +79,21 @@ export const create = async () => {
   const { projectName, projectPath } = deriveProjectNameAndPath(argv[2]);
   debug("projectName", projectName);
   debug("projectPath", projectPath);
+
   const packageManagerType = determinePackageManager();
   debug("packageManagerType", packageManagerType);
+
   const packageManagerRun =
     packageManagerType === "npm" ? "npm run"
     : packageManagerType === "pnpm" ? "pnpm"
     : "yarn";
   debug("packageManagerRun", packageManagerRun);
+
+  const packageManagerLockFile =
+    packageManagerType === "npm" ? "package-lock.json"
+    : packageManagerType === "pnpm" ? "pnpm-lock.yaml"
+    : "yarn.lock";
+
   log(`Creating project ${projectName}`);
 
   try {
@@ -116,7 +124,8 @@ export const create = async () => {
     key,
     value
       .replaceAll("PM_RUN", packageManagerRun)
-      .replaceAll("PM_NAME", packageManagerType),
+      .replaceAll("PM_NAME", packageManagerType)
+      .replaceAll("PM_LOCK_FILE", packageManagerLockFile),
   ]);
 
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
