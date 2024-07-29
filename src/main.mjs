@@ -145,16 +145,16 @@ dependencies. Other useful scripts are:
     ${packageManagerRun} build
     ${chalk.gray("# Clean all build artefacts")}
     ${packageManagerRun} clean
-    ${chalk.gray("# Automatically format code using prettier")}
+    ${chalk.gray("# Format code using prettier")}
     ${packageManagerRun} format
     ${chalk.gray("# Run project in production mode")}
-    ${packageManagerRun} start
+    ${packageManagerType} start
     ${chalk.gray(
-      "# Run project in watch mode with automatic restarts on changes",
+      "# Run project in dev mode with automatic restarts on changes",
     )}
     ${packageManagerRun} dev
-    ${chalk.gray("# Run eslint and check code formatting")}
-    ${packageManagerRun} test
+    ${chalk.gray("# Run tests, linter, type checker and check code formatting")}
+    ${packageManagerType} test
   `
     .trim()
     .split("\n")
