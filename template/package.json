@@ -15,7 +15,7 @@
     "clean": "rimraf dist",
     "dev": "PM_RUN clean && PM_RUN dev-start",
     "dev-start": "concurrently --handle-input PM_NAME:dev:*",
-    "dev:app": "nodemon --watch dist --watch PM_LOCK_FILE --exec \"npm run start\"",
+    "dev:app": "nodemon --watch dist --watch PM_LOCK_FILE --exec \"PM_NAME start\"",
     "dev:build": "node build.mjs --watch",
     "dev:types": "tsc --watch --noEmit --preserveWatchOutput --pretty",
     "format": "prettier --write .",
