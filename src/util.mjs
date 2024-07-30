@@ -19,3 +19,9 @@ export const deriveProjectNameAndPath = (nameArg, cwd = processCwd()) => {
   }
   return { projectName, projectPath };
 };
+
+export const mapObject = (obj, mapper) =>
+  Object.fromEntries(Object.entries(obj).map(mapper));
+
+export const indentLines = (str, indent = "    ") =>
+  str.replace(/^(?=.)/gm, indent);

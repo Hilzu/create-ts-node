@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join as pathJoin } from "node:path";
 import { env } from "node:process";
 import { determinePackageManager } from "./main.mjs";
-import { deriveProjectNameAndPath } from "./util.mjs";
+import { deriveProjectNameAndPath, indentLines } from "./util.mjs";
 
 test("deriveProjectNameAndPath", async (t) => {
   const dir = tmpdir();
@@ -67,5 +67,27 @@ test("determinePackageManager", async (t) => {
   await t.test("with pnpm", (_t) => {
     env.npm_config_user_agent = "pnpm/9.6.0 npm/? node/v22.5.1 win32 x64";
     assert.equal(determinePackageManager(), "pnpm");
+  });
+});
+
+test("indentLines", async (t) => {
+  await t.test("with a single line", (_t) => {
+    assert.equal(indentLines("single"), "    single");
+  });
+
+  await t.test("with multiple lines", (_t) => {
+    const input = "first\nsecond\nthird";
+    const expected = "    first\n    second\n    third";
+    assert.equal(indentLines(input), expected);
+  });
+
+  await t.test("with a custom indent", (_t) => {
+    const input = "first\nsecond\nthird";
+    const expected = "  first\n  second\n  third";
+    assert.equal(indentLines(input, "  "), expected);
+  });
+
+  await t.test("with an empty string", (_t) => {
+    assert.equal(indentLines(""), "");
   });
 });
