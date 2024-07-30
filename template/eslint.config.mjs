@@ -12,7 +12,15 @@ export default tsEslint.config(
     ignores: ["dist/*"],
   },
   js.configs.recommended,
-  ...tsEslint.configs.recommended,
+
+  // Rules enabled by this config in addition to recommended: https://typescript-eslint.io/rules/?=xrecommended-strict
+  // Replace this with ...tsEslint.configs.recommendedTypeChecked, if you want to include recommended rules only
+  ...tsEslint.configs.strictTypeChecked,
+
+  // Rules enabled by this config: https://typescript-eslint.io/rules/?=stylistic
+  // Remove this if you don't want to include stylistic rules
+  ...tsEslint.configs.stylisticTypeChecked,
+
   prettier,
   {
     languageOptions: {

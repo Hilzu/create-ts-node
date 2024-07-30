@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk, { Chalk } from "chalk";
 import {
   copyFile,
   mkdir,
@@ -7,11 +7,11 @@ import {
   stat,
   writeFile,
 } from "node:fs/promises";
-import { basename as baseName, join as pathJoin } from "node:path";
-import { argv, env, cwd as processCwd } from "node:process";
+import { join as pathJoin } from "node:path";
+import { env } from "node:process";
 import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
-import { log, debug } from "./util.mjs";
+import { debug, indentLines, log, mapObject } from "./util.mjs";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const templatePath = pathJoin(__dirname, "..", "template");
@@ -31,18 +31,6 @@ export const determinePackageManager = () => {
   if (npmUserAgent.includes("yarn/")) return "yarn";
   if (npmUserAgent.includes("pnpm/")) return "pnpm";
   return "npm";
-};
-
-export const deriveProjectNameAndPath = (nameArg, cwd = processCwd()) => {
-  const nameFromCwd = !nameArg || nameArg === ".";
-  const projectName = nameFromCwd ? baseName(cwd) : nameArg;
-  let projectPath;
-  if (nameFromCwd) projectPath = cwd;
-  else {
-    const dir = nameArg.startsWith("@") ? nameArg.split("/")[1] : nameArg;
-    projectPath = pathJoin(cwd, dir);
-  }
-  return { projectName, projectPath };
 };
 
 const lineEndRegex = /\r\n|\r|\n/g;
@@ -72,26 +60,47 @@ const copyFiles = async (projectPath) => {
   }
 };
 
-const mapObject = (obj, mapper) =>
-  Object.fromEntries(Object.entries(obj).map(mapper));
+const createScriptsUsage = (pmRun, pmName, noColor = false) => {
+  const c = noColor ? new Chalk({ level: 0 }) : chalk;
+  return `
+${c.gray("# Build project")}
+${pmRun} build
+${c.gray("# Clean all build artefacts")}
+${pmRun} clean
+${c.gray("# Format code using prettier")}
+${pmRun} format
+${c.gray("# Run project in production mode")}
+${pmName} start
+${c.gray("# Run project in dev mode with automatic restarts on changes")}
+${pmRun} dev
+${c.gray("# Run tests, linter, type checker and check code formatting")}
+${pmName} test`.trim();
+};
 
-export const create = async () => {
-  const { projectName, projectPath } = deriveProjectNameAndPath(argv[2]);
-  debug("projectName", projectName);
-  debug("projectPath", projectPath);
+const createReadme = (projectName, pmRun, pmName) => {
+  return `# ${projectName}
 
-  const packageManagerType = determinePackageManager();
-  debug("packageManagerType", packageManagerType);
+## Using the scripts
 
-  const packageManagerRun =
-    packageManagerType === "npm" ? "npm run"
-    : packageManagerType === "pnpm" ? "pnpm"
+\`\`\`sh
+${createScriptsUsage(pmRun, pmName, true)}
+\`\`\`
+`;
+};
+
+export const create = async ({ projectName, projectPath }) => {
+  const pmName = determinePackageManager();
+  debug("pmName", pmName);
+
+  const pmRun =
+    pmName === "npm" ? "npm run"
+    : pmName === "pnpm" ? "pnpm"
     : "yarn";
-  debug("packageManagerRun", packageManagerRun);
+  debug("pmRun", pmRun);
 
-  const packageManagerLockFile =
-    packageManagerType === "npm" ? "package-lock.json"
-    : packageManagerType === "pnpm" ? "pnpm-lock.yaml"
+  const pmLockFile =
+    pmName === "npm" ? "package-lock.json"
+    : pmName === "pnpm" ? "pnpm-lock.yaml"
     : "yarn.lock";
 
   log(`Creating project ${projectName}`);
@@ -123,38 +132,27 @@ export const create = async () => {
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
     value
-      .replaceAll("PM_RUN", packageManagerRun)
-      .replaceAll("PM_NAME", packageManagerType)
-      .replaceAll("PM_LOCK_FILE", packageManagerLockFile),
+      .replaceAll("PM_RUN", pmRun)
+      .replaceAll("PM_NAME", pmName)
+      .replaceAll("PM_LOCK_FILE", pmLockFile),
   ]);
 
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
   await normalizeLineEndings(packageJsonPath);
 
   const readmePath = pathJoin(projectPath, "README.md");
-  await writeFile(readmePath, `# ${projectName}${EOL}`);
+  const readme = createReadme(projectName, pmRun, pmName);
+  await writeFile(readmePath, readme);
+  await normalizeLineEndings(readmePath);
 
   console.log();
   `
 Project created!
 
-You can now run "${packageManagerType} install" in the project directory to install the
+You can now run "${pmName} install" in the project directory to install the
 dependencies. Other useful scripts are:
 
-    ${chalk.gray("# Build project")}
-    ${packageManagerRun} build
-    ${chalk.gray("# Clean all build artefacts")}
-    ${packageManagerRun} clean
-    ${chalk.gray("# Format code using prettier")}
-    ${packageManagerRun} format
-    ${chalk.gray("# Run project in production mode")}
-    ${packageManagerType} start
-    ${chalk.gray(
-      "# Run project in dev mode with automatic restarts on changes",
-    )}
-    ${packageManagerRun} dev
-    ${chalk.gray("# Run tests, linter, type checker and check code formatting")}
-    ${packageManagerType} test
+${indentLines(createScriptsUsage(pmRun, pmName))}
   `
     .trim()
     .split("\n")
