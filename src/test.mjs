@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { tmpdir } from "node:os";
 import { join as pathJoin } from "node:path";
 import { env } from "node:process";
-import { deriveProjectNameAndPath, determinePackageManager } from "./main.mjs";
+import { determinePackageManager } from "./main.mjs";
+import { deriveProjectNameAndPath } from "./util.mjs";
 
 test("deriveProjectNameAndPath", async (t) => {
   const dir = tmpdir();

@@ -7,11 +7,11 @@ import {
   stat,
   writeFile,
 } from "node:fs/promises";
-import { basename as baseName, join as pathJoin } from "node:path";
-import { argv, env, cwd as processCwd } from "node:process";
+import { join as pathJoin } from "node:path";
+import { env } from "node:process";
 import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
-import { log, debug } from "./util.mjs";
+import { debug, log } from "./util.mjs";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const templatePath = pathJoin(__dirname, "..", "template");
@@ -31,18 +31,6 @@ export const determinePackageManager = () => {
   if (npmUserAgent.includes("yarn/")) return "yarn";
   if (npmUserAgent.includes("pnpm/")) return "pnpm";
   return "npm";
-};
-
-export const deriveProjectNameAndPath = (nameArg, cwd = processCwd()) => {
-  const nameFromCwd = !nameArg || nameArg === ".";
-  const projectName = nameFromCwd ? baseName(cwd) : nameArg;
-  let projectPath;
-  if (nameFromCwd) projectPath = cwd;
-  else {
-    const dir = nameArg.startsWith("@") ? nameArg.split("/")[1] : nameArg;
-    projectPath = pathJoin(cwd, dir);
-  }
-  return { projectName, projectPath };
 };
 
 const lineEndRegex = /\r\n|\r|\n/g;
@@ -75,11 +63,7 @@ const copyFiles = async (projectPath) => {
 const mapObject = (obj, mapper) =>
   Object.fromEntries(Object.entries(obj).map(mapper));
 
-export const create = async () => {
-  const { projectName, projectPath } = deriveProjectNameAndPath(argv[2]);
-  debug("projectName", projectName);
-  debug("projectPath", projectPath);
-
+export const create = async ({ projectName, projectPath }) => {
   const packageManagerType = determinePackageManager();
   debug("packageManagerType", packageManagerType);
 
