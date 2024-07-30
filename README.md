@@ -4,7 +4,8 @@
 [![CI status](https://github.com/hilzu/create-ts-node/actions/workflows/ci.yml/badge.svg)](https://github.com/Hilzu/create-ts-node/actions/workflows/ci.yml)
 
 Create a new Node.js application using this template.
-The template includes TypeScript for type-safety, ESLint for linting and Prettier for code formatting.
+The template includes [TypeScript][typescript] for type-safety, [esbuild][esbuild] for fast builds, [ESLint][eslint] and [typescript-eslint][ts-eslint] for linting and [Prettier][prettier] for code formatting.
+Tests written with [Node.js test runner][node-test] are also included.
 Everything is configured to work together out of the box and using modern conventions.
 
 EcmaScript modules are used instead of CommonJS to align with the future of JavaScript and Node.js.
@@ -63,6 +64,14 @@ Project creation is tested with the combination (matrix) of supported Node.js ve
 
 ## Having issues?
 
-If there are any issues with the template, please [open an issue](https://github.com/Hilzu/create-ts-node/issues/new/choose).
+If there are any issues with the template, please [open an issue][new-issue].
 To debug issues you can set the environment variable `NODE_DEBUG=create-ts-node` to get more detailed logs.
 Output with the variable set should be included in any bug reports.
+
+[new-issue]: https://github.com/Hilzu/create-ts-node/issues/new/choose
+[typescript]: https://www.typescriptlang.org
+[esbuild]: https://esbuild.github.io
+[eslint]: https://eslint.org
+[ts-eslint]: https://typescript-eslint.io
+[prettier]: https://prettier.io
+[node-test]: https://nodejs.org/api/test.html#test-runner
