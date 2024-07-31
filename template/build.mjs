@@ -15,6 +15,7 @@ const options = {
 
   entryPoints: ["src/**"],
   outdir: "dist",
+  outbase: "src",
 
   platform: "node",
   target: ["node20.9"],
