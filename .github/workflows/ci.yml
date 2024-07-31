@@ -133,3 +133,27 @@ jobs:
       - name: Test app in dev mode
         run: curl --verbose --fail --silent --show-error --max-time 5 --retry 4 --retry-connrefused localhost:3001 | jq .
         shell: bash
+
+  docker:
+    name: Docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: "npm"
+      - run: npm install
+        env:
+          NODE_ENV: production
+      - run: npm install --global .
+      - run: npx create-ts-node docker-project
+        working-directory: ${{ runner.temp }}
+      - run: npm install
+        working-directory: ${{ runner.temp }}/docker-project
+      - run: docker build --tag docker-test .
+        working-directory: ${{ runner.temp }}/docker-project
+      - run: docker run --publish 3000:3000 --name docker-test --detach docker-test
+        working-directory: ${{ runner.temp }}/docker-project
+      - run: curl --verbose --fail --silent --show-error --max-time 5 --retry 4 --retry-all-errors localhost:3000 | jq .
+        shell: bash

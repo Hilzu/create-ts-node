@@ -133,7 +133,8 @@ export const create = async ({ projectName, projectPath }) => {
     value
       .replaceAll("PM_RUN", pmRun)
       .replaceAll("PM_NAME", pmName)
-      .replaceAll("PM_LOCK_FILE", pmLockFile),
+      .replaceAll("PM_LOCK_FILE", pmLockFile)
+      .replaceAll("PROJECT_NAME", projectName),
   ]);
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
   await normalizeLineEndings(packageJsonPath);
