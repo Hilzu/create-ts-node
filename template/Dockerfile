@@ -7,7 +7,6 @@ WORKDIR /opt/app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-RUN ls -alh
 RUN npm run build
 
 
