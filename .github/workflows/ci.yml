@@ -117,12 +117,14 @@ jobs:
         if: matrix.os != 'windows'
         env:
           NODE_ENV: production
+          PORT: 3000
       - name: Start app (Windows)
         run: Start-Process -FilePath "${{ matrix.package-manager }}.cmd" -ArgumentList "start" -PassThru
         working-directory: ${{ runner.temp }}/new-project
         if: matrix.os == 'windows'
         env:
           NODE_ENV: production
+          PORT: 3000
 
       - name: Test app
         run: curl --verbose --fail --silent --show-error --max-time 5 --retry 4 --retry-connrefused localhost:3000 | jq .
