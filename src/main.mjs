@@ -127,7 +127,6 @@ export const create = async ({ projectName, projectPath }) => {
     encoding: "utf-8",
   });
   const packageJson = JSON.parse(packageJsonFile);
-
   packageJson.name = projectName;
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
@@ -136,7 +135,6 @@ export const create = async ({ projectName, projectPath }) => {
       .replaceAll("PM_NAME", pmName)
       .replaceAll("PM_LOCK_FILE", pmLockFile),
   ]);
-
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
   await normalizeLineEndings(packageJsonPath);
 
@@ -144,6 +142,11 @@ export const create = async ({ projectName, projectPath }) => {
   const readme = createReadme(projectName, pmRun, pmName);
   await writeFile(readmePath, readme);
   await normalizeLineEndings(readmePath);
+
+  const envPath = pathJoin(projectPath, ".env");
+  const exampleEnvPath = pathJoin(projectPath, "example.env");
+  await copyFile(exampleEnvPath, envPath);
+  await normalizeLineEndings(envPath);
 
   console.log();
   `
