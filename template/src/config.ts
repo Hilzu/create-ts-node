@@ -11,7 +11,7 @@ export const getEnv = (key: string, defaultValue?: string): string => {
   return value;
 };
 
-export const port = Number(getEnv("PORT"));
+export const port = Number(getEnv("PORT", "3000"));
 
 type NodeEnv = "development" | "production" | "test";
 

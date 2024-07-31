@@ -85,23 +85,7 @@ jobs:
       - run: ${{ matrix.package-manager }} run format
         working-directory: ${{ runner.temp }}/new-project
 
-      - name: Start app in dev mode (Unix)
-        run: ${{ matrix.package-manager }} run dev &
-        working-directory: ${{ runner.temp }}/new-project
-        env:
-          PORT: 3001
-        if: matrix.os != 'windows'
-      - name: Start app in dev mode (Windows)
-        run: Start-Process -FilePath "${{ matrix.package-manager }}.cmd" -ArgumentList "run","dev" -PassThru
-        working-directory: ${{ runner.temp }}/new-project
-        env:
-          PORT: 3001
-        if: matrix.os == 'windows'
-
-      - name: Test app in dev mode
-        run: curl --verbose --fail --silent --show-error --max-time 5 --retry 4 --retry-connrefused localhost:3001 | jq .
-        shell: bash
-
+      # Test app in production mode
       - name: Remove dependencies
         run: npx rimraf@latest node_modules
         working-directory: ${{ runner.temp }}/new-project
@@ -117,15 +101,35 @@ jobs:
         if: matrix.os != 'windows'
         env:
           NODE_ENV: production
-          PORT: 3000
       - name: Start app (Windows)
         run: Start-Process -FilePath "${{ matrix.package-manager }}.cmd" -ArgumentList "start" -PassThru
         working-directory: ${{ runner.temp }}/new-project
         if: matrix.os == 'windows'
         env:
           NODE_ENV: production
-          PORT: 3000
 
       - name: Test app
         run: curl --verbose --fail --silent --show-error --max-time 5 --retry 4 --retry-connrefused localhost:3000 | jq .
+        shell: bash
+
+      # Test app in dev mode
+      - name: Install dev dependencies
+        run: ${{ matrix.package-manager }} install
+        working-directory: ${{ runner.temp }}/new-project
+
+      - name: Start app in dev mode (Unix)
+        run: ${{ matrix.package-manager }} run dev &
+        working-directory: ${{ runner.temp }}/new-project
+        env:
+          PORT: 3001
+        if: matrix.os != 'windows'
+      - name: Start app in dev mode (Windows)
+        run: Start-Process -FilePath "${{ matrix.package-manager }}.cmd" -ArgumentList "run","dev" -PassThru
+        working-directory: ${{ runner.temp }}/new-project
+        env:
+          PORT: 3001
+        if: matrix.os == 'windows'
+
+      - name: Test app in dev mode
+        run: curl --verbose --fail --silent --show-error --max-time 5 --retry 4 --retry-connrefused localhost:3001 | jq .
         shell: bash
