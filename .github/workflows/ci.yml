@@ -85,18 +85,37 @@ jobs:
       - run: ${{ matrix.package-manager }} run format
         working-directory: ${{ runner.temp }}/new-project
 
+      # Test app in production mode
+      - name: Remove dependencies
+        run: npx rimraf@latest node_modules
+        working-directory: ${{ runner.temp }}/new-project
+      - name: Install production dependencies
+        run: ${{ matrix.package-manager }} install
+        working-directory: ${{ runner.temp }}/new-project
+        env:
+          NODE_ENV: production
+
       - name: Start app (Unix)
         run: ${{ matrix.package-manager }} start &
         working-directory: ${{ runner.temp }}/new-project
         if: matrix.os != 'windows'
+        env:
+          NODE_ENV: production
       - name: Start app (Windows)
         run: Start-Process -FilePath "${{ matrix.package-manager }}.cmd" -ArgumentList "start" -PassThru
         working-directory: ${{ runner.temp }}/new-project
         if: matrix.os == 'windows'
+        env:
+          NODE_ENV: production
 
       - name: Test app
         run: curl --verbose --fail --silent --show-error --max-time 5 --retry 4 --retry-connrefused localhost:3000 | jq .
         shell: bash
+
+      # Test app in dev mode
+      - name: Install dev dependencies
+        run: ${{ matrix.package-manager }} install
+        working-directory: ${{ runner.temp }}/new-project
 
       - name: Start app in dev mode (Unix)
         run: ${{ matrix.package-manager }} run dev &
