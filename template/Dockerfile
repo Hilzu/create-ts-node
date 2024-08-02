@@ -7,7 +7,7 @@ WORKDIR /opt/app
 INSTALL_PNPM
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=PM_LOCK_FILE,target=PM_LOCK_FILE \
-    --mount=type=cache,target=PM_CACHE_DIR \
+    --mount=type=cache,target=PM_CACHE_DIR,sharing=locked \
     PM_INSTALL
 COPY . .
 RUN PM_RUN build
@@ -30,7 +30,7 @@ ENTRYPOINT ["/opt/tini", "--"]
 WORKDIR /opt/app
 COPY package.json PM_LOCK_FILE ./
 INSTALL_PNPM
-RUN --mount=type=cache,target=PM_CACHE_DIR \
+RUN --mount=type=cache,target=PM_CACHE_DIR,sharing=locked \
     PM_INSTALL
 COPY --from=build /opt/app/dist ./dist
 USER node
