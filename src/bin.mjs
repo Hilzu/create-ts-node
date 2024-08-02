@@ -1,14 +1,35 @@
 #!/usr/bin/env node
 
 import { create } from "./main.mjs";
-import { debug, deriveProjectNameAndPath } from "./util.mjs";
-import { argv } from "node:process";
+import {
+  debug,
+  deriveProjectNameAndPath,
+  determinePackageManager,
+} from "./util.mjs";
+import { parseArgs } from "node:util";
+
+const options = {
+  "package-manager": {
+    type: "string",
+  },
+};
 
 try {
-  const { projectName, projectPath } = deriveProjectNameAndPath(argv[2]);
+  const { values, positionals } = parseArgs({
+    options,
+    allowPositionals: true,
+  });
+  debug("values", values);
+  debug("positionals", positionals);
+
+  const { projectName, projectPath } = deriveProjectNameAndPath(positionals[0]);
   debug("projectName", projectName);
   debug("projectPath", projectPath);
-  await create({ projectName, projectPath });
+
+  const packageManager = values["package-manager"] ?? determinePackageManager();
+  debug("packageManager", packageManager);
+
+  await create({ projectName, projectPath, packageManager });
 } catch (err) {
   console.error("create-ts-node:", err.message);
   debug(err.stack);

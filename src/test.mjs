@@ -3,11 +3,11 @@ import assert from "node:assert/strict";
 import { tmpdir } from "node:os";
 import { join as pathJoin } from "node:path";
 import { env } from "node:process";
-import { determinePackageManager } from "./main.mjs";
 import {
   deriveProjectNameAndPath,
   indentLines,
   cmdToExecForm,
+  determinePackageManager,
 } from "./util.mjs";
 
 test("deriveProjectNameAndPath", async (t) => {

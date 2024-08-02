@@ -8,7 +8,6 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { join as pathJoin } from "node:path";
-import { env } from "node:process";
 import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
 import { cmdToExecForm, debug, indentLines, log, mapObject } from "./util.mjs";
@@ -18,20 +17,6 @@ const templatePath = pathJoin(__dirname, "..", "template");
 
 debug("__dirname", __dirname);
 debug("templatePath", templatePath);
-
-export const determinePackageManager = () => {
-  const npmUserAgent = env.npm_config_user_agent;
-  debug("npmUserAgent", npmUserAgent);
-  const npmExecPath = env.npm_execpath;
-  debug("npmExecPath", npmExecPath);
-  const parent = env._;
-  debug("parent", parent);
-
-  if (!npmUserAgent) return "npm";
-  if (npmUserAgent.includes("yarn/")) return "yarn";
-  if (npmUserAgent.includes("pnpm/")) return "pnpm";
-  return "npm";
-};
 
 const lineEndRegex = /\r\n|\r|\n/g;
 
@@ -88,9 +73,8 @@ ${createScriptsUsage(pmRun, pmName, true)}
 `;
 };
 
-export const create = async ({ projectName, projectPath }) => {
-  const pmName = determinePackageManager();
-  debug("pmName", pmName);
+export const create = async ({ projectName, projectPath, packageManager }) => {
+  const pmName = packageManager;
 
   const pmRun =
     pmName === "npm" ? "npm run"
