@@ -17,6 +17,15 @@ FROM node:${NODE_VERSION} AS app
 ENV NODE_ENV=production
 ENV PORT=3000
 
+# Use tini to handle signals properly
+# https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#handling-kernel-signals
+# You can also use `--init` flag when running `docker run` and remove these lines
+ARG TARGETARCH
+ENV TINI_VERSION=v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${TARGETARCH} /opt/tini
+RUN chmod +x /opt/tini
+ENTRYPOINT ["/opt/tini", "--"]
+
 WORKDIR /opt/app
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
