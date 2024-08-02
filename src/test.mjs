@@ -4,7 +4,11 @@ import { tmpdir } from "node:os";
 import { join as pathJoin } from "node:path";
 import { env } from "node:process";
 import { determinePackageManager } from "./main.mjs";
-import { deriveProjectNameAndPath, indentLines } from "./util.mjs";
+import {
+  deriveProjectNameAndPath,
+  indentLines,
+  cmdToExecForm,
+} from "./util.mjs";
 
 test("deriveProjectNameAndPath", async (t) => {
   const dir = tmpdir();
@@ -89,5 +93,22 @@ test("indentLines", async (t) => {
 
   await t.test("with an empty string", (_t) => {
     assert.equal(indentLines(""), "");
+  });
+});
+
+test("cmdToExecForm", async (t) => {
+  await t.test("with a simple command", (_t) => {
+    const cmd = "echo hello";
+    const exec = cmdToExecForm(cmd);
+    assert.equal(exec, '["echo", "hello"]');
+  });
+
+  await t.test("with a command with arguments", (_t) => {
+    const cmd = "node --import ./dist/setup.js --enable-source-maps .";
+    const exec = cmdToExecForm(cmd);
+    assert.equal(
+      exec,
+      '["node", "--import", "./dist/setup.js", "--enable-source-maps", "."]',
+    );
   });
 });

@@ -11,7 +11,7 @@ import { join as pathJoin } from "node:path";
 import { env } from "node:process";
 import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
-import { debug, indentLines, log, mapObject } from "./util.mjs";
+import { cmdToExecForm, debug, indentLines, log, mapObject } from "./util.mjs";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const templatePath = pathJoin(__dirname, "..", "template");
@@ -148,6 +148,13 @@ export const create = async ({ projectName, projectPath }) => {
   const exampleEnvPath = pathJoin(projectPath, "example.env");
   await copyFile(exampleEnvPath, envPath);
   await normalizeLineEndings(envPath);
+
+  const dockerfilePath = pathJoin(projectPath, "Dockerfile");
+  let dockerfile = await readFile(dockerfilePath, { encoding: "utf-8" });
+  const nodeStart = cmdToExecForm(packageJson.scripts.start);
+  dockerfile = dockerfile.replaceAll("NODE_START", nodeStart);
+  await writeFile(dockerfilePath, dockerfile);
+  await normalizeLineEndings(dockerfilePath);
 
   console.log();
   `

@@ -33,4 +33,4 @@ RUN --mount=type=cache,target=/root/.npm \
 COPY --from=build /opt/app/dist ./dist
 USER node
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD NODE_START
