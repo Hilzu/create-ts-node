@@ -4,12 +4,13 @@ ARG NODE_VERSION=20
 FROM node:${NODE_VERSION} AS build
 ENV NODE_ENV=development
 WORKDIR /opt/app
+INSTALL_PNPM
 RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci
+    --mount=type=bind,source=PM_LOCK_FILE,target=PM_LOCK_FILE \
+    --mount=type=cache,target=PM_CACHE_DIR \
+    PM_INSTALL
 COPY . .
-RUN npm run build
+RUN PM_RUN build
 
 
 FROM node:${NODE_VERSION} AS app
@@ -27,9 +28,10 @@ RUN chmod +x /opt/tini
 ENTRYPOINT ["/opt/tini", "--"]
 
 WORKDIR /opt/app
-COPY package.json package-lock.json ./
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci
+COPY package.json PM_LOCK_FILE ./
+INSTALL_PNPM
+RUN --mount=type=cache,target=PM_CACHE_DIR \
+    PM_INSTALL
 COPY --from=build /opt/app/dist ./dist
 USER node
 EXPOSE 3000

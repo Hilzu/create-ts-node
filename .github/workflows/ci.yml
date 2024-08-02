@@ -28,9 +28,17 @@ jobs:
   docker:
     name: Docker
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package-manager: ["npm", "yarn", "pnpm"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        if: matrix.package-manager == 'pnpm'
+        with:
+          version: "9"
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -43,10 +51,10 @@ jobs:
       - name: Install create-ts-node globally
         run: npm install --global .
       - name: Create project
-        run: npx create-ts-node docker-project
+        run: npx create-ts-node docker-project --package-manager ${{ matrix.package-manager }}
         working-directory: ${{ runner.temp }}
       - name: Install project dependencies
-        run: npm install
+        run: ${{ matrix.package-manager }} install
         working-directory: ${{ runner.temp }}/docker-project
       - name: Build Docker image
         run: docker build --tag docker-test .

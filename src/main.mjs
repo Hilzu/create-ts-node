@@ -87,6 +87,13 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
     : pmName === "pnpm" ? "pnpm-lock.yaml"
     : "yarn.lock";
 
+  const pmInstall = pmName === "npm" ? "npm ci" : `${pmName} install`;
+
+  const pmDockerCacheDir =
+    pmName === "npm" ? "/root/.npm"
+    : pmName === "pnpm" ? "/root/.local/share/pnpm/store"
+    : "/usr/local/share/.cache/yarn";
+
   log(`Creating project ${projectName}`);
 
   try {
@@ -136,7 +143,16 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
   const dockerfilePath = pathJoin(projectPath, "Dockerfile");
   let dockerfile = await readFile(dockerfilePath, { encoding: "utf-8" });
   const nodeStart = cmdToExecForm(packageJson.scripts.start);
-  dockerfile = dockerfile.replaceAll("NODE_START", nodeStart);
+  dockerfile = dockerfile
+    .replaceAll("NODE_START", nodeStart)
+    .replaceAll("PM_RUN", pmRun)
+    .replaceAll("PM_INSTALL", pmInstall)
+    .replaceAll("PM_LOCK_FILE", pmLockFile)
+    .replaceAll("PM_CACHE_DIR", pmDockerCacheDir)
+    .replaceAll(
+      "INSTALL_PNPM",
+      pmName === "pnpm" ? "RUN npm install -g pnpm@9" : "",
+    );
   await writeFile(dockerfilePath, dockerfile);
   await normalizeLineEndings(dockerfilePath);
 
