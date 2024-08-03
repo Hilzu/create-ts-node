@@ -41,6 +41,24 @@ For safety creation is not allowed in an existing directory unless it is empty.
 Scoped project names are supported, for example `@my-scope/new-app`.
 The directory name will be the same as the project name without the scope.
 
+You can see the available options by running `npx create-ts-node --help`.
+
+```
+Usage: create-ts-node [options] [project-name]
+
+Create a new TypeScript Node.js project.
+
+Positionals:
+  project-name  The name of the created project and its directory
+                Can be a scoped package name (e.g. "@scope/project-name")
+                (default: the current directory)
+
+Options:
+  --package-manager <name>  Force the specified package manager
+  -h, --help                Display this help message
+  -v, --version             Display the version number
+```
+
 ## Compatability and supported Node.js versions
 
 Windows, Linux and macOS are supported.
@@ -62,6 +80,11 @@ You can use an older version easily with npx: `npx create-ts-node@^0.4.0 new-app
 
 Project creation is tested with the combination (matrix) of supported Node.js versions, package managers and operating systems.
 
+## Dockerfile in project
+
+A `Dockerfile` is included in the project to build a Docker image.
+It is based on the official Node.js image and follows the [best practices][docker-node-best-practices] for Node.js Docker images.
+
 ## Having issues?
 
 If there are any issues with the template, please [open an issue][new-issue].
@@ -75,3 +98,4 @@ Output with the variable set should be included in any bug reports.
 [ts-eslint]: https://typescript-eslint.io
 [prettier]: https://prettier.io
 [node-test]: https://nodejs.org/api/test.html#test-runner
+[docker-node-best-practices]: https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md
