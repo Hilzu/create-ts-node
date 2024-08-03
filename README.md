@@ -84,6 +84,8 @@ Project creation is tested with the combination (matrix) of supported Node.js ve
 
 A `Dockerfile` is included in the project to build a Docker image.
 It is based on the official Node.js image and follows the [best practices][docker-node-best-practices] for Node.js Docker images.
+You can build the image with `npm run docker:build` and run it with `npm run docker:run`.
+These scripts provide a quick way to test the application in a container.
 
 ## Having issues?
 
