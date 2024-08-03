@@ -18,6 +18,8 @@
     "dev:app": "nodemon --watch dist --watch PM_LOCK_FILE --exec \"PM_NAME start\"",
     "dev:build": "node build.mjs --watch",
     "dev:types": "tsc --watch --noEmit --preserveWatchOutput --pretty",
+    "docker:build": "docker build --tag PROJECT_NAME .",
+    "docker:run": "docker run --init --interactive --tty --publish 3000:3000 PROJECT_NAME",
     "format": "prettier --write .",
     "start": "node --import ./dist/setup.js --enable-source-maps .",
     "test": "concurrently --group PM_NAME:test:* && PM_RUN test-node",

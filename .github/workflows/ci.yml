@@ -28,6 +28,8 @@ jobs:
   docker:
     name: Docker
     runs-on: ubuntu-latest
+    env:
+      NODE_DEBUG: create-ts-node
     strategy:
       matrix:
         package-manager: ["npm", "yarn", "pnpm"]
@@ -57,10 +59,10 @@ jobs:
         run: ${{ matrix.package-manager }} install
         working-directory: ${{ runner.temp }}/docker-project
       - name: Build Docker image
-        run: docker build --tag docker-test .
+        run: ${{ matrix.package-manager }} run docker:build
         working-directory: ${{ runner.temp }}/docker-project
       - name: Run Docker container
-        run: docker run --publish 3000:3000 --name docker-test --detach docker-test
+        run: docker run --init --detach --publish 3000:3000 docker-project
         working-directory: ${{ runner.temp }}/docker-project
       - name: Test Docker container
         run: curl --verbose --fail --silent --show-error --max-time 5 --retry 4 --retry-all-errors localhost:3000 | jq .
