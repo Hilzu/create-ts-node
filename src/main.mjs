@@ -47,25 +47,27 @@ const copyFiles = async (projectPath) => {
 
 const createScriptsUsage = (pmRun, pmName, noColor = false) => {
   const c = noColor ? new Chalk({ level: 0 }) : chalk;
-  return `
+  const msg = `
+${c.gray("# Run project in dev mode with automatic restarts on changes")}
+${pmRun} dev
+${c.gray("# Run tests, linter, type checker and check code formatting")}
+${pmName} test
+${c.gray("# Format code using prettier")}
+${pmRun} format
 ${c.gray("# Build project")}
 ${pmRun} build
 ${c.gray("# Clean all build artefacts")}
 ${pmRun} clean
-${c.gray("# Format code using prettier")}
-${pmRun} format
 ${c.gray("# Run project in production mode")}
 ${pmName} start
-${c.gray("# Run project in dev mode with automatic restarts on changes")}
-${pmRun} dev
-${c.gray("# Run tests, linter, type checker and check code formatting")}
-${pmName} test`.trim();
+`;
+  return msg.trim();
 };
 
 const createReadme = (projectName, pmRun, pmName) => {
   return `# ${projectName}
 
-## Using the scripts
+## Available scripts
 
 \`\`\`sh
 ${createScriptsUsage(pmRun, pmName, true)}
@@ -161,7 +163,7 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
 Project created!
 
 You can now run "${pmName} install" in the project directory to install the
-dependencies. Other useful scripts are:
+dependencies. Useful scripts to run are:
 
 ${indentLines(createScriptsUsage(pmRun, pmName))}
   `
