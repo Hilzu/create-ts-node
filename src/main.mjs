@@ -8,30 +8,15 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { join as pathJoin } from "node:path";
-import { env } from "node:process";
 import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
-import { debug, indentLines, log, mapObject } from "./util.mjs";
+import { cmdToExecForm, debug, indentLines, log, mapObject } from "./util.mjs";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const templatePath = pathJoin(__dirname, "..", "template");
 
 debug("__dirname", __dirname);
 debug("templatePath", templatePath);
-
-export const determinePackageManager = () => {
-  const npmUserAgent = env.npm_config_user_agent;
-  debug("npmUserAgent", npmUserAgent);
-  const npmExecPath = env.npm_execpath;
-  debug("npmExecPath", npmExecPath);
-  const parent = env._;
-  debug("parent", parent);
-
-  if (!npmUserAgent) return "npm";
-  if (npmUserAgent.includes("yarn/")) return "yarn";
-  if (npmUserAgent.includes("pnpm/")) return "pnpm";
-  return "npm";
-};
 
 const lineEndRegex = /\r\n|\r|\n/g;
 
@@ -88,9 +73,8 @@ ${createScriptsUsage(pmRun, pmName, true)}
 `;
 };
 
-export const create = async ({ projectName, projectPath }) => {
-  const pmName = determinePackageManager();
-  debug("pmName", pmName);
+export const create = async ({ projectName, projectPath, packageManager }) => {
+  const pmName = packageManager;
 
   const pmRun =
     pmName === "npm" ? "npm run"
@@ -102,6 +86,13 @@ export const create = async ({ projectName, projectPath }) => {
     pmName === "npm" ? "package-lock.json"
     : pmName === "pnpm" ? "pnpm-lock.yaml"
     : "yarn.lock";
+
+  const pmInstall = pmName === "npm" ? "npm ci" : `${pmName} install`;
+
+  const pmDockerCacheDir =
+    pmName === "npm" ? "/root/.npm"
+    : pmName === "pnpm" ? "/root/.local/share/pnpm/store"
+    : "/usr/local/share/.cache/yarn";
 
   log(`Creating project ${projectName}`);
 
@@ -133,7 +124,8 @@ export const create = async ({ projectName, projectPath }) => {
     value
       .replaceAll("PM_RUN", pmRun)
       .replaceAll("PM_NAME", pmName)
-      .replaceAll("PM_LOCK_FILE", pmLockFile),
+      .replaceAll("PM_LOCK_FILE", pmLockFile)
+      .replaceAll("PROJECT_NAME", projectName),
   ]);
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
   await normalizeLineEndings(packageJsonPath);
@@ -147,6 +139,22 @@ export const create = async ({ projectName, projectPath }) => {
   const exampleEnvPath = pathJoin(projectPath, "example.env");
   await copyFile(exampleEnvPath, envPath);
   await normalizeLineEndings(envPath);
+
+  const dockerfilePath = pathJoin(projectPath, "Dockerfile");
+  let dockerfile = await readFile(dockerfilePath, { encoding: "utf-8" });
+  const nodeStart = cmdToExecForm(packageJson.scripts.start);
+  dockerfile = dockerfile
+    .replaceAll("NODE_START", nodeStart)
+    .replaceAll("PM_RUN", pmRun)
+    .replaceAll("PM_INSTALL", pmInstall)
+    .replaceAll("PM_LOCK_FILE", pmLockFile)
+    .replaceAll("PM_CACHE_DIR", pmDockerCacheDir)
+    .replaceAll(
+      "INSTALL_PNPM",
+      pmName === "pnpm" ? "RUN npm install -g pnpm@9" : "",
+    );
+  await writeFile(dockerfilePath, dockerfile);
+  await normalizeLineEndings(dockerfilePath);
 
   console.log();
   `

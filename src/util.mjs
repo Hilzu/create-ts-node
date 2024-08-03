@@ -1,5 +1,5 @@
 import { debuglog } from "node:util";
-import { cwd as processCwd } from "node:process";
+import { cwd as processCwd, env } from "node:process";
 import { basename as baseName, join as pathJoin } from "node:path";
 
 export const log = (msg, ...args) => {
@@ -25,3 +25,25 @@ export const mapObject = (obj, mapper) =>
 
 export const indentLines = (str, indent = "    ") =>
   str.replace(/^(?=.)/gm, indent);
+
+export const cmdToExecForm = (cmd) => {
+  const elements = cmd
+    .split(" ")
+    .map((part) => `"${part}"`)
+    .join(", ");
+  return `[${elements}]`;
+};
+
+export const determinePackageManager = () => {
+  const npmUserAgent = env.npm_config_user_agent;
+  debug("npmUserAgent", npmUserAgent);
+  const npmExecPath = env.npm_execpath;
+  debug("npmExecPath", npmExecPath);
+  const parent = env._;
+  debug("parent", parent);
+
+  if (!npmUserAgent) return "npm";
+  if (npmUserAgent.includes("yarn/")) return "yarn";
+  if (npmUserAgent.includes("pnpm/")) return "pnpm";
+  return "npm";
+};
