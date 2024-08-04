@@ -67,7 +67,11 @@ const run = async () => {
   debug("projectName", projectName);
   debug("projectPath", projectPath);
 
-  const packageManager = values["package-manager"] ?? determinePackageManager();
+  const pmArg = values["package-manager"];
+  if (pmArg)
+    if (!["npm", "yarn", "pnpm"].includes(pmArg))
+      throw new Error(`Unknown package manager: ${pmArg}`);
+  const packageManager = pmArg || determinePackageManager();
   debug("packageManager", packageManager);
 
   await create({ projectName, projectPath, packageManager });
