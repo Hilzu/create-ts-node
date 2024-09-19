@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import tsEslint from "typescript-eslint";
 import prettier from "eslint-config-prettier";
+import nodePlugin from "eslint-plugin-n";
 import globals from "globals";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -37,6 +38,12 @@ export default tsEslint.config(
         "error",
         { argsIgnorePattern: "^_" },
       ],
+    },
+  },
+  nodePlugin.configs["flat/recommended"],
+  {
+    rules: {
+      "n/prefer-node-protocol": "error",
     },
   },
   {

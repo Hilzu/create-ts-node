@@ -5,6 +5,7 @@
   "main": "dist/main.js",
   "author": "",
   "license": "UNLICENSED",
+  "private": true,
   "type": "module",
   "engines": {
     "node": "^20.9.0 || >=22.5.1"
@@ -38,6 +39,7 @@
     "esbuild": "^0.23.1",
     "eslint": "^9.10.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-n": "^17.10.3",
     "globals": "^15.9.0",
     "nodemon": "^3.1.6",
     "prettier": "3.3.3",
