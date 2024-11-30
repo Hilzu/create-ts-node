@@ -11,7 +11,7 @@ const {
 
 const options = {
   logLevel: "info",
-  color: true,
+  color: watch ? true : undefined,
 
   entryPoints: ["src/**"],
   outdir: "dist",
