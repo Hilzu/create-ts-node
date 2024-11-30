@@ -10,7 +10,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=PM_CACHE_DIR,sharing=locked \
     PM_INSTALL
 COPY . .
-RUN PM_RUN build
+RUN node --run build
 
 
 FROM node:${NODE_VERSION} AS app

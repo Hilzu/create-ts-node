@@ -120,12 +120,9 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
     encoding: "utf-8",
   });
   const packageJson = JSON.parse(packageJsonFile);
-  packageJson.name = projectName;
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
     value
-      .replaceAll("PM_RUN", pmRun)
-      .replaceAll("PM_NAME", pmName)
       .replaceAll("PM_LOCK_FILE", pmLockFile)
       .replaceAll("PROJECT_NAME", projectName),
   ]);
@@ -145,7 +142,6 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
   const dockerfilePath = pathJoin(projectPath, "Dockerfile");
   let dockerfile = await readFile(dockerfilePath, { encoding: "utf-8" });
   dockerfile = dockerfile
-    .replaceAll("PM_RUN", pmRun)
     .replaceAll("PM_INSTALL", pmInstall)
     .replaceAll("PM_LOCK_FILE", pmLockFile)
     .replaceAll("PM_CACHE_DIR", pmDockerCacheDir)
