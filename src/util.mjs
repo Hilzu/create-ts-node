@@ -26,14 +26,6 @@ export const mapObject = (obj, mapper) =>
 export const indentLines = (str, indent = "    ") =>
   str.replace(/^(?=.)/gm, indent);
 
-export const cmdToExecForm = (cmd) => {
-  const elements = cmd
-    .split(" ")
-    .map((part) => `"${part}"`)
-    .join(", ");
-  return `[${elements}]`;
-};
-
 export const determinePackageManager = () => {
   const npmUserAgent = env.npm_config_user_agent;
   debug("npmUserAgent", npmUserAgent);

@@ -26,4 +26,4 @@ COPY --from=build /opt/build/dist ./dist
 
 USER node
 EXPOSE 3000
-CMD NODE_START
+CMD ["node", "--run", "start"]
