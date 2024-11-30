@@ -122,6 +122,7 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
     encoding: "utf-8",
   });
   const packageJson = JSON.parse(packageJsonFile);
+  packageJson.name = projectName;
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
     value
