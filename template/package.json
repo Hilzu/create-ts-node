@@ -8,7 +8,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "^20.9.0 || >=22.5.1"
+    "node": ">=22.11.0"
   },
   "scripts": {
     "build": "PM_RUN clean && PM_RUN build:ts",
@@ -33,7 +33,7 @@
   "devDependencies": {
     "@eslint/js": "^9.16.0",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^20.17.9",
+    "@types/node": "^22.10.1",
     "concurrently": "^9.1.0",
     "dotenv": "^16.4.5",
     "esbuild": "^0.24.0",

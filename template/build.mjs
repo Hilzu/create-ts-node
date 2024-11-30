@@ -20,7 +20,7 @@ const options = {
   outbase: "src",
 
   platform: "node",
-  target: ["node20.9"],
+  target: ["node22.11"],
   format: "esm",
   packages: "external",
 
