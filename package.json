@@ -32,9 +32,9 @@
   "scripts": {
     "format": "prettier --write .",
     "test": "concurrently --group node:test:* && node --run test-node",
+    "test-node": "node --test --test-reporter spec src/test.mjs",
     "test:format": "prettier --check .",
     "test:lint": "eslint .",
-    "test-node": "node --test --test-reporter spec src/test.mjs",
     "update-template-deps": "(cd template && npx npm-check-updates@latest --upgrade)"
   },
   "dependencies": {
