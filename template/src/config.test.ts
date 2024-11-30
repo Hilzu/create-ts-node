@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { getEnv } from "../dist/config.js";
+import { getEnv } from "./config.js";
 
-test("getEnv", async (t) => {
+await test("getEnv", async (t) => {
   await t.test("should return the value of the environment variable", (_t) => {
     const env = getEnv("PATH");
     assert.equal(env, process.env.PATH);
