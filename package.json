@@ -3,7 +3,7 @@
   "version": "1.7.2",
   "description": "Create a new Node.js project that uses Typescript, ESLint and Prettier",
   "author": "Santeri Hiltunen <github@me.hilzu.moe> (https://hilzu.moe/)",
-  "license": "Unlicense",
+  "license": "0BSD",
   "keywords": [
     "create",
     "init",
