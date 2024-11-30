@@ -54,7 +54,7 @@ ${c.gray("# Run tests, linter, type checker and check code formatting")}
 ${pmName} test
 ${c.gray("# Format code using prettier")}
 ${pmRun} format
-${c.gray("# Build project")}
+${c.gray("# Build project for production")}
 ${pmRun} build
 ${c.gray("# Clean all build artefacts")}
 ${pmRun} clean
@@ -66,6 +66,8 @@ ${pmName} start
 
 const createReadme = (projectName, pmRun, pmName) => {
   return `# ${projectName}
+
+This project was bootstrapped with [create-ts-node](https://www.npmjs.com/package/create-ts-node).
 
 ## Available scripts
 

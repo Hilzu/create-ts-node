@@ -8,6 +8,9 @@ The template includes [TypeScript][typescript] for type-safety, [esbuild][esbuil
 Tests written with [Node.js test runner][node-test] are also included.
 Everything is configured to work together out of the box and using modern conventions.
 
+Latest stable Node.js features are utilized to provide a good starting point for new projects and to minimize the need for external dependencies.
+This template does not include any framework or library, only the necessary tools to run, build and test the application.
+
 EcmaScript modules are used instead of CommonJS to align with the future of JavaScript and Node.js.
 This allows to natively use `import` and `export` statements and top-level `await`.
 
