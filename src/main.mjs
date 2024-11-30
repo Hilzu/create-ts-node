@@ -10,7 +10,7 @@ import {
 import { join as pathJoin } from "node:path";
 import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
-import { cmdToExecForm, debug, indentLines, log, mapObject } from "./util.mjs";
+import { debug, indentLines, log, mapObject } from "./util.mjs";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const templatePath = pathJoin(__dirname, "..", "template");
@@ -120,12 +120,9 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
     encoding: "utf-8",
   });
   const packageJson = JSON.parse(packageJsonFile);
-  packageJson.name = projectName;
   packageJson.scripts = mapObject(packageJson.scripts, ([key, value]) => [
     key,
     value
-      .replaceAll("PM_RUN", pmRun)
-      .replaceAll("PM_NAME", pmName)
       .replaceAll("PM_LOCK_FILE", pmLockFile)
       .replaceAll("PROJECT_NAME", projectName),
   ]);
@@ -144,10 +141,7 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
 
   const dockerfilePath = pathJoin(projectPath, "Dockerfile");
   let dockerfile = await readFile(dockerfilePath, { encoding: "utf-8" });
-  const nodeStart = cmdToExecForm(packageJson.scripts.start);
   dockerfile = dockerfile
-    .replaceAll("NODE_START", nodeStart)
-    .replaceAll("PM_RUN", pmRun)
     .replaceAll("PM_INSTALL", pmInstall)
     .replaceAll("PM_LOCK_FILE", pmLockFile)
     .replaceAll("PM_CACHE_DIR", pmDockerCacheDir)
