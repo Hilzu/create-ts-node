@@ -9,6 +9,8 @@ const {
   },
 });
 
+const isProduction = !watch;
+
 const options = {
   logLevel: "info",
   color: watch ? true : undefined,
@@ -23,6 +25,8 @@ const options = {
   packages: "external",
 
   sourcemap: true,
+  bundle: false,
+  minify: isProduction,
 };
 
 if (watch) {
