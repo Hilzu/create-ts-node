@@ -3,14 +3,15 @@ import { parseArgs } from "node:util";
 import * as esbuild from "esbuild";
 
 const {
-  values: { watch },
+  values: { dev, watch },
 } = parseArgs({
   options: {
+    dev: { type: "boolean", default: false },
     watch: { type: "boolean", default: false },
   },
 });
 
-const isProduction = !watch;
+const isProduction = !dev;
 
 const testFileRegex = /test\.(ts|mts|cts)$/;
 const files = await readDir("src", { recursive: true, withFileTypes: true });
