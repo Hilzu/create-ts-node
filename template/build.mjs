@@ -1,4 +1,3 @@
-import { readdir as readDir } from "node:fs/promises";
 import { parseArgs } from "node:util";
 import * as esbuild from "esbuild";
 
@@ -13,19 +12,17 @@ const {
 
 const isProduction = !dev;
 
-const testFileRegex = /test\.(ts|mts|cts)$/;
-const files = await readDir("src", { recursive: true, withFileTypes: true });
-const entryPoints = files
-  .filter((file) => file.isFile() && !testFileRegex.test(file.name))
-  .map((file) => `${file.parentPath}/${file.name}`);
-
 const options = {
   logLevel: "info",
   color: watch ? true : undefined,
 
-  entryPoints,
+  entryPoints: ["src/**"],
   outdir: "dist",
   outbase: "src",
+
+  loader: {
+    ".test.ts": "empty",
+  },
 
   platform: "node",
   target: ["node22.11"],
