@@ -24,6 +24,6 @@ RUN --mount=type=cache,target=PM_CACHE_DIR,sharing=locked \
     PM_INSTALL
 COPY --from=build /opt/build/dist ./dist
 
-USER node
+USER node:node
 EXPOSE 3000
 CMD ["node", "--run", "start"]
