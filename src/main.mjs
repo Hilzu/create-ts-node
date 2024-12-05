@@ -60,6 +60,8 @@ ${c.gray("# Clean all build artefacts")}
 ${pmRun} clean
 ${c.gray("# Run project in production mode")}
 ${pmName} start
+${c.gray("# Automatically fix linting and formatting issues")}
+${pmRun} fix
 `;
   return msg.trim();
 };

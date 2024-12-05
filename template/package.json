@@ -21,6 +21,8 @@
     "dev:types": "tsc --watch --noEmit --preserveWatchOutput --pretty",
     "docker:build": "docker build --tag PROJECT_NAME .",
     "docker:run": "docker run --init --interactive --tty --publish 3000:3000 PROJECT_NAME",
+    "fix": "concurrently --group node:fix:* node:format",
+    "fix:lint": "eslint --fix .",
     "format": "prettier --write .",
     "start": "node --import ./dist/setup.js --enable-source-maps .",
     "test": "concurrently --group node:test:* && node --run test-node",
