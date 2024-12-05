@@ -26,7 +26,7 @@
     "format": "prettier --write .",
     "start": "node --import ./dist/setup.js --enable-source-maps .",
     "test": "concurrently --group node:test:* && node --run test-node",
-    "test-node": "tsx --import ./test/setup.mjs --test --test-reporter spec \"src/**/*.test.ts\"",
+    "test-node": "tsx --import ./test/shim.mjs --test --test-reporter spec \"src/**/*.test.ts\"",
     "test:format": "prettier --check .",
     "test:lint": "eslint .",
     "test:types": "tsc --noEmit --pretty"
