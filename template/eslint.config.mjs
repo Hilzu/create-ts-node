@@ -33,16 +33,16 @@ export default tsEslint.config(
         ...globals.nodeBuiltin,
       },
     },
-    rules: {
-      "@typescript-eslint/no-unused-vars": [
-        "error",
-        { argsIgnorePattern: "^_" },
-      ],
-    },
   },
   nodePlugin.configs["flat/recommended"],
   {
     rules: {
+      "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/no-import-type-side-effects": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_" },
+      ],
       "n/prefer-node-protocol": "error",
     },
   },
