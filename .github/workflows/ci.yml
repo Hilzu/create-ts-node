@@ -129,7 +129,7 @@ jobs:
         working-directory: ${{ runner.temp }}/new-project
       - run: ${{ matrix.package-manager }} test
         working-directory: ${{ runner.temp }}/new-project
-      - run: ${{ matrix.package-manager }} run format
+      - run: ${{ matrix.package-manager }} run fix
         working-directory: ${{ runner.temp }}/new-project
 
       # Test app in production mode
