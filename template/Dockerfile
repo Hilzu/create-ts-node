@@ -13,7 +13,7 @@ COPY . .
 RUN node --run build
 
 
-FROM node:${NODE_VERSION} AS app
+FROM node:${NODE_VERSION}-slim AS app
 ENV NODE_ENV=production
 ENV PORT=3000
 WORKDIR /opt/app
