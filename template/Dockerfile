@@ -5,10 +5,8 @@ FROM node:${NODE_VERSION} AS build
 ENV NODE_ENV=development
 WORKDIR /opt/build
 INSTALL_PNPM
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=PM_LOCK_FILE,target=PM_LOCK_FILE \
-    --mount=type=cache,target=PM_CACHE_DIR,sharing=locked \
-    PM_INSTALL
+COPY package.json PM_LOCK_FILE ./
+RUN PM_INSTALL
 COPY . .
 RUN node --run build
 
@@ -20,8 +18,7 @@ WORKDIR /opt/app
 
 COPY package.json PM_LOCK_FILE ./
 INSTALL_PNPM
-RUN --mount=type=cache,target=PM_CACHE_DIR,sharing=locked \
-    PM_INSTALL
+COPY --from=deps /opt/deps/node_modules ./node_modules
 COPY --from=build /opt/build/dist ./dist
 
 USER node:node
