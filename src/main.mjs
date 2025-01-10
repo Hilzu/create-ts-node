@@ -93,7 +93,9 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
     : pmName === "pnpm" ? "pnpm-lock.yaml"
     : "yarn.lock";
 
-  const pmInstall = pmName === "npm" ? "npm ci" : `${pmName} install`;
+  const pmInstall =
+    pmName === "npm" ? "npm ci" : `${pmName} install --frozen-lockfile`;
+  const pmInstallProd = `${pmInstall} ${pmName === "npm" ? "--omit=dev" : "--prod"}`;
 
   const pmDockerCacheDir =
     pmName === "npm" ? "/root/.npm"
@@ -147,7 +149,8 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
   const dockerfilePath = pathJoin(projectPath, "Dockerfile");
   let dockerfile = await readFile(dockerfilePath, { encoding: "utf-8" });
   dockerfile = dockerfile
-    .replaceAll("PM_INSTALL", pmInstall)
+    .replaceAll("PM_INSTALL_DEV", pmInstall)
+    .replaceAll("PM_INSTALL_PROD", pmInstallProd)
     .replaceAll("PM_LOCK_FILE", pmLockFile)
     .replaceAll("PM_CACHE_DIR", pmDockerCacheDir)
     .replaceAll(
