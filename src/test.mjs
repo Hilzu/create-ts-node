@@ -7,6 +7,7 @@ import {
   deriveProjectNameAndPath,
   indentLines,
   determinePackageManager,
+  getPackageManagerVersion,
 } from "./util.mjs";
 
 test("deriveProjectNameAndPath", async (t) => {
@@ -92,5 +93,23 @@ test("indentLines", async (t) => {
 
   await t.test("with an empty string", (_t) => {
     assert.equal(indentLines(""), "");
+  });
+});
+
+test("getPackageManagerVersion", async (t) => {
+  await t.test("with npm", (_t) => {
+    env.npm_config_user_agent =
+      "npm/10.7.0 node/v18.20.4 linux x64 workspaces/false ci/github-actions";
+    assert.equal(getPackageManagerVersion("npm"), "10.7.0");
+  });
+
+  await t.test("with yarn", (_t) => {
+    env.npm_config_user_agent = "yarn/1.22.22 npm/? node/v20.15.1 darwin arm64";
+    assert.equal(getPackageManagerVersion("yarn"), "1.22.22");
+  });
+
+  await t.test("with pnpm", (_t) => {
+    env.npm_config_user_agent = "pnpm/9.6.0 npm/? node/v22.5.1 win32 x64";
+    assert.equal(getPackageManagerVersion("pnpm"), "9.6.0");
   });
 });

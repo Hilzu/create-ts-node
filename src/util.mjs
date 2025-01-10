@@ -39,3 +39,9 @@ export const determinePackageManager = () => {
   if (npmUserAgent.includes("pnpm/")) return "pnpm";
   return "npm";
 };
+
+export const getPackageManagerVersion = (pmName) => {
+  const npmUserAgent = env.npm_config_user_agent;
+  const match = npmUserAgent.match(new RegExp(`${pmName}/([^ ]+)`));
+  return match ? match[1] : undefined;
+};
