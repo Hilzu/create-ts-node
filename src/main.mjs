@@ -155,7 +155,7 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
     .replaceAll("PM_CACHE_DIR", pmDockerCacheDir)
     .replaceAll(
       "INSTALL_PNPM",
-      pmName === "pnpm" ? "RUN npm install -g pnpm@9" : "",
+      pmName === "pnpm" ? "RUN npm install -g pnpm@10" : "",
     );
   await writeFile(dockerfilePath, dockerfile);
   await normalizeLineEndings(dockerfilePath);

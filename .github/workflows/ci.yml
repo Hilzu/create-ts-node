@@ -44,7 +44,7 @@ jobs:
         uses: pnpm/action-setup@v4
         if: matrix.package-manager == 'pnpm'
         with:
-          version: "9"
+          version: "10"
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -88,7 +88,7 @@ jobs:
         name: Install pnpm
         if: matrix.package-manager == 'pnpm'
         with:
-          version: "9"
+          version: "10"
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -137,7 +137,7 @@ jobs:
         run: npx rimraf@latest node_modules
         working-directory: ${{ runner.temp }}/new-project
       - name: Install production dependencies
-        run: ${{ matrix.package-manager }} install
+        run: ${{ matrix.package-manager }} install --prod
         working-directory: ${{ runner.temp }}/new-project
         env:
           NODE_ENV: production
