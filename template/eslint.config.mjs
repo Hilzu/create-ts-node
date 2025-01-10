@@ -9,9 +9,11 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default tsEslint.config(
+  // https://eslint.org/docs/latest/use/configure/ignore
   {
-    ignores: ["dist/*"],
+    ignores: ["**/dist/"],
   },
+
   js.configs.recommended,
 
   // Rules enabled by this config in addition to recommended: https://typescript-eslint.io/rules/?=xrecommended-strict
