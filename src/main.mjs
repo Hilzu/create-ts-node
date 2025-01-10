@@ -10,7 +10,13 @@ import {
 import { join as pathJoin } from "node:path";
 import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
-import { debug, indentLines, log, mapObject } from "./util.mjs";
+import {
+  debug,
+  getPackageManagerVersion,
+  indentLines,
+  log,
+  mapObject,
+} from "./util.mjs";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const templatePath = pathJoin(__dirname, "..", "template");
@@ -82,6 +88,8 @@ ${createScriptsUsage(pmRun, pmName, true)}
 export const create = async ({ projectName, projectPath, packageManager }) => {
   const pmName = packageManager;
 
+  const pmVersion = getPackageManagerVersion(pmName);
+
   const pmRun =
     pmName === "npm" ? "npm run"
     : pmName === "pnpm" ? "pnpm"
@@ -133,6 +141,7 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
       .replaceAll("PM_LOCK_FILE", pmLockFile)
       .replaceAll("PROJECT_NAME", projectName),
   ]);
+  if (pmVersion) packageJson.engines[pmName] = `^${pmVersion}`;
   await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
   await normalizeLineEndings(packageJsonPath);
 
