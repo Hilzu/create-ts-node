@@ -1,6 +1,6 @@
 import js from "@eslint/js";
 import tsEslint from "typescript-eslint";
-import prettier from "eslint-config-prettier";
+import prettier from "eslint-config-prettier/flat";
 import nodePlugin from "eslint-plugin-n";
 import globals from "globals";
 import { dirname } from "node:path";
@@ -24,7 +24,6 @@ export default tsEslint.config(
   // Remove this if you don't want to include stylistic rules
   ...tsEslint.configs.stylisticTypeChecked,
 
-  prettier,
   {
     languageOptions: {
       parserOptions: {
@@ -52,4 +51,5 @@ export default tsEslint.config(
     files: ["**/*.mjs", "**/*.cjs", "**/*.js"],
     ...tsEslint.configs.disableTypeChecked,
   },
+  prettier,
 );
