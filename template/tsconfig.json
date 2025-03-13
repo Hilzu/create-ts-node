@@ -3,14 +3,17 @@
     "lib": ["es2023"],
     "module": "nodenext",
     "target": "es2022",
+
     "noEmit": true,
+
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
-    "libReplacement": false
+    "libReplacement": false,
+    "sourceMap": true
   },
   "exclude": ["node_modules", "dist"]
 }
