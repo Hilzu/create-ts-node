@@ -4,7 +4,7 @@
 [![CI status](https://github.com/hilzu/create-ts-node/actions/workflows/ci.yml/badge.svg)](https://github.com/Hilzu/create-ts-node/actions/workflows/ci.yml)
 
 Create a new Node.js application using this template.
-The template includes [TypeScript][typescript] for type-safety, [esbuild][esbuild] for fast builds, [ESLint][eslint] and [typescript-eslint][ts-eslint] for linting and [Prettier][prettier] for code formatting.
+The template includes [TypeScript][typescript] for type-safety, [ESLint][eslint] and [typescript-eslint][ts-eslint] for linting and [Prettier][prettier] for code formatting.
 Tests written with [Node.js test runner][node-test] are also included.
 Everything is configured to work together out of the box and using modern conventions.
 
@@ -99,7 +99,6 @@ Output with the variable set should be included in any bug reports.
 
 [new-issue]: https://github.com/Hilzu/create-ts-node/issues/new/choose
 [typescript]: https://www.typescriptlang.org
-[esbuild]: https://esbuild.github.io
 [eslint]: https://eslint.org
 [ts-eslint]: https://typescript-eslint.io
 [prettier]: https://prettier.io
