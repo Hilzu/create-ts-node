@@ -98,7 +98,7 @@ jobs:
           NODE_ENV: production
 
       - run: npm install --global .
-        if: matrix.package-manager == 'npm'
+        if: matrix.package-manager == 'npm' || matrix.package-manager == 'pnpm'
       - run: npx create-ts-node new-project
         if: matrix.package-manager == 'npm'
         working-directory: ${{ runner.temp }}
@@ -109,17 +109,7 @@ jobs:
         if: matrix.package-manager == 'yarn'
         working-directory: ${{ runner.temp }}
 
-      - name: Create package.json for pnpm
-        run: |
-          with open('package.json', 'w') as f:
-            f.write('{}')
-        shell: python
-        if: matrix.package-manager == 'pnpm'
-        working-directory: ${{ runner.temp }}
-      - run: pnpm link ${{ github.workspace }}
-        if: matrix.package-manager == 'pnpm'
-        working-directory: ${{ runner.temp }}
-      - run: pnpm exec create-ts-node new-project
+      - run: create-ts-node --package-manager pnpm new-project
         if: matrix.package-manager == 'pnpm'
         working-directory: ${{ runner.temp }}
 
