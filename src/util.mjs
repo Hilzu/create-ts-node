@@ -28,7 +28,6 @@ export const indentLines = (str, indent = "    ") =>
 
 export const determinePackageManager = () => {
   const npmUserAgent = env.npm_config_user_agent;
-  debug("npmUserAgent", npmUserAgent);
   const npmExecPath = env.npm_execpath;
   debug("npmExecPath", npmExecPath);
   const parent = env._;
@@ -41,7 +40,7 @@ export const determinePackageManager = () => {
 };
 
 export const getPackageManagerVersion = (pmName) => {
-  const npmUserAgent = env.npm_config_user_agent;
+  const npmUserAgent = env.npm_config_user_agent ?? "";
   const match = npmUserAgent.match(new RegExp(`${pmName}/([^ ]+)`));
   return match ? match[1] : undefined;
 };
