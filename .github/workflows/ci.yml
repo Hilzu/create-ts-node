@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ["22", "23"]
+        node-version: ["22", "24"]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
@@ -77,7 +77,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu, macos, windows]
-        node-version: ["22", "23"]
+        node-version: ["22", "24"]
         package-manager: [npm, yarn, pnpm]
     runs-on: ${{ matrix.os }}-latest
     env:
