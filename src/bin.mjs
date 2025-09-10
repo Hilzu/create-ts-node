@@ -8,6 +8,7 @@ import {
 } from "./util.mjs";
 import { parseArgs } from "node:util";
 import { readFile } from "node:fs/promises";
+import { env } from "node:process";
 
 const options = {
   "package-manager": {
@@ -71,6 +72,7 @@ const run = async () => {
   if (pmArg)
     if (!["npm", "yarn", "pnpm"].includes(pmArg))
       throw new Error(`Unknown package manager: ${pmArg}`);
+  debug("npmUserAgent", env.npm_config_user_agent);
   const packageManager = pmArg || determinePackageManager();
   debug("packageManager", packageManager);
 
