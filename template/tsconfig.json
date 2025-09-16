@@ -1,21 +1,30 @@
 {
+  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator"],
-    "module": "nodenext",
     "target": "es2022",
-    "moduleResolution": "node16",
+    "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator"],
 
+    // Output options
     "noEmit": true,
+    "sourceMap": true,
 
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    // Module options
+    "module": "nodenext",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
-    "libReplacement": false,
-    "sourceMap": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+
+    // Include global types for these @types/* packages
+    "types": ["node"],
+
+    // Strict type-checking options
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedSideEffectImports": true,
+
+    "skipLibCheck": true,
+    "libReplacement": false
   },
   "exclude": ["node_modules", "dist"]
 }
