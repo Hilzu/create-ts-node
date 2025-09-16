@@ -10,7 +10,6 @@
 
     // Module options
     "module": "nodenext",
-    "esModuleInterop": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
@@ -25,8 +24,7 @@
     "noUncheckedSideEffectImports": true,
 
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "libReplacement": false,
+    "libReplacement": false
   },
   "exclude": ["node_modules", "dist"]
 }
