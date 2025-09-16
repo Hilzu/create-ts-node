@@ -14,7 +14,8 @@
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "libReplacement": false,
-    "sourceMap": true
+    "sourceMap": true,
+    "rewriteRelativeImportExtensions": true
   },
   "exclude": ["node_modules", "dist"]
 }
