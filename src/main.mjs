@@ -1,4 +1,3 @@
-import chalk, { Chalk } from "chalk";
 import {
   copyFile,
   mkdir,
@@ -17,6 +16,7 @@ import {
   log,
   mapObject,
 } from "./util.mjs";
+import { styleText } from "node:util";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const templatePath = pathJoin(__dirname, "..", "template");
@@ -51,22 +51,27 @@ const copyFiles = async (projectPath) => {
   }
 };
 
+const createTextStyler = (noColor = false) => {
+  if (noColor) return (_style, text) => text;
+  return styleText;
+};
+
 const createScriptsUsage = (pmRun, pmName, noColor = false) => {
-  const c = noColor ? new Chalk({ level: 0 }) : chalk;
+  const s = createTextStyler(noColor);
   const msg = `
-${c.gray("# Run project in dev mode with automatic restarts on changes")}
+${s("gray", "# Run project in dev mode with automatic restarts on changes")}
 ${pmRun} dev
-${c.gray("# Run tests, linter, type checker and check code formatting")}
+${s("gray", "# Run tests, linter, type checker and check code formatting")}
 ${pmName} test
-${c.gray("# Format code using prettier")}
+${s("gray", "# Format code using prettier")}
 ${pmRun} format
-${c.gray("# Build project for production")}
+${s("gray", "# Build project for production")}
 ${pmRun} build
-${c.gray("# Clean all build artefacts")}
+${s("gray", "# Clean all build artefacts")}
 ${pmRun} clean
-${c.gray("# Run project in production mode")}
+${s("gray", "# Run project in production mode")}
 ${pmName} start
-${c.gray("# Automatically fix linting and formatting issues")}
+${s("gray", "# Automatically fix linting and formatting issues")}
 ${pmRun} fix
 `;
   return msg.trim();
