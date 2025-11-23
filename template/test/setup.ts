@@ -1,8 +1,5 @@
 // Common setup for all tests
-import dotenv from "dotenv";
 import { after, before } from "node:test";
-
-dotenv.config();
 
 process.env.NODE_ENV = "test";
 
