@@ -7,7 +7,6 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { join as pathJoin } from "node:path";
-import { fileURLToPath } from "node:url";
 import { EOL } from "node:os";
 import {
   debug,
@@ -18,10 +17,9 @@ import {
 } from "./util.mjs";
 import { styleText } from "node:util";
 
-const __dirname = fileURLToPath(new URL(".", import.meta.url));
-const templatePath = pathJoin(__dirname, "..", "template");
+const templatePath = pathJoin(import.meta.dirname, "..", "template");
 
-debug("__dirname", __dirname);
+debug("dirname", import.meta.dirname);
 debug("templatePath", templatePath);
 
 const lineEndRegex = /\r\n|\r|\n/g;

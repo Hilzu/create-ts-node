@@ -3,10 +3,6 @@ import tsEslint from "typescript-eslint";
 import prettier from "eslint-config-prettier/flat";
 import nodePlugin from "eslint-plugin-n";
 import globals from "globals";
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default tsEslint.config(
   // https://eslint.org/docs/latest/use/configure/ignore
@@ -28,7 +24,7 @@ export default tsEslint.config(
     languageOptions: {
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: __dirname,
+        tsconfigRootDir: import.meta.dirname,
       },
       globals: {
         ...globals.nodeBuiltin,
