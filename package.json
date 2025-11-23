@@ -27,7 +27,7 @@
   },
   "main": "src/main.mjs",
   "engines": {
-    "node": ">=22.11.0"
+    "node": "^22.13.0 || >=23.5.0"
   },
   "scripts": {
     "format": "prettier --write .",
