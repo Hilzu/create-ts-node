@@ -28,7 +28,7 @@ npm init ts-node@latest new-app
 # Using npx
 npx create-ts-node@latest new-app
 
-# Using yarn
+# Using yarn classic
 yarn create ts-node new-app
 
 # Using pnpm
@@ -74,7 +74,8 @@ To create a project for an older version of Node.js, use an older version of thi
 
 | Node.js version | Package version |
 | --------------- | --------------- |
-| 22.x or greater | latest          |
+| 24.x or greater | latest          |
+| 22.x            | ^2.0.0          |
 | 20.x            | ^1.0.0          |
 | 18.x            | ^0.4.0          |
 | 10.x            | ^0.2.0          |

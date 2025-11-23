@@ -1,4 +1,4 @@
-ARG NODE_VERSION=22
+ARG NODE_VERSION=24
 
 
 FROM node:${NODE_VERSION} AS build
@@ -16,7 +16,7 @@ ENV NODE_ENV=production
 WORKDIR /opt/deps
 INSTALL_PNPM
 COPY package.json PM_LOCK_FILE ./
-RUN PM_INSTALL_PROD
+RUN PM_INSTALL_PROD && mkdir -p node_modules
 
 
 FROM node:${NODE_VERSION}-slim AS app
