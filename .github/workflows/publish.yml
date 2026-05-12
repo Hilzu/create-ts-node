@@ -53,6 +53,8 @@ jobs:
       - name: Start app
         run: ${{ matrix.package-manager }} start &
         working-directory: project
+        env:
+          NODE_ENV: production
       - name: Test app
         run: curl --fail --silent --show-error --max-time 10 localhost:3000 | jq .
         shell: bash
