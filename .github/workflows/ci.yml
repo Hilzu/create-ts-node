@@ -41,7 +41,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         if: matrix.package-manager == 'pnpm'
         with:
           version: "10"
@@ -84,7 +84,7 @@ jobs:
       NODE_DEBUG: create-ts-node
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         name: Install pnpm
         if: matrix.package-manager == 'pnpm'
         with:

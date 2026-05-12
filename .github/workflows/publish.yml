@@ -30,7 +30,7 @@ jobs:
     needs:
       - publish
     steps:
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         name: Install pnpm
         with:
           version: "10"
