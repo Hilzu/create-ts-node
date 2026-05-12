@@ -3,12 +3,10 @@ import tsEslint from "typescript-eslint";
 import prettier from "eslint-config-prettier/flat";
 import nodePlugin from "eslint-plugin-n";
 import globals from "globals";
+import { defineConfig, globalIgnores } from "eslint/config";
 
-export default tsEslint.config(
-  // https://eslint.org/docs/latest/use/configure/ignore
-  {
-    ignores: ["**/dist/"],
-  },
+export default defineConfig([
+  globalIgnores(["**/dist/"]),
 
   js.configs.recommended,
 
@@ -48,4 +46,4 @@ export default tsEslint.config(
     ...tsEslint.configs.disableTypeChecked,
   },
   prettier,
-);
+]);
