@@ -1,20 +1,17 @@
 import globals from "globals";
-import pluginJs from "@eslint/js";
-import nodePlugin from "eslint-plugin-n";
+import js from "@eslint/js";
+import node from "eslint-plugin-n";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
   globalIgnores(["template/"]),
-  { languageOptions: { globals: globals.node } },
-  pluginJs.configs.recommended,
-  nodePlugin.configs["flat/recommended"],
   {
+    files: ["**/*.js", "**/*.mjs", "**/*.cts"],
+    extends: ["js/recommended", "n/recommended"],
+    languageOptions: { globals: globals.node },
+    plugins: { js, n: node },
     rules: {
       "n/prefer-node-protocol": "error",
-    },
-  },
-  {
-    rules: {
       "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     },
   },

@@ -1,38 +1,48 @@
 import js from "@eslint/js";
-import tsEslint from "typescript-eslint";
+import ts from "typescript-eslint";
 import prettier from "eslint-config-prettier/flat";
-import nodePlugin from "eslint-plugin-n";
+import node from "eslint-plugin-n";
 import globals from "globals";
+import { defineConfig, globalIgnores } from "eslint/config";
 
-export default tsEslint.config(
-  // https://eslint.org/docs/latest/use/configure/ignore
+const files = [
+  "**/*.mjs",
+  "**/*.cjs",
+  "**/*.js",
+  "**/*.mts",
+  "**/*.cts",
+  "**/*.ts",
+];
+
+export default defineConfig([
+  globalIgnores(["**/dist/"]),
   {
-    ignores: ["**/dist/"],
-  },
-
-  js.configs.recommended,
-
-  // Rules enabled by this config in addition to recommended: https://typescript-eslint.io/rules/?=xrecommended-strict
-  // Replace this with tsEslint.configs.recommendedTypeChecked, if you want to include recommended rules only
-  tsEslint.configs.strictTypeChecked,
-
-  // Rules enabled by this config: https://typescript-eslint.io/rules/?=stylistic
-  // Remove this if you don't want to include stylistic rules
-  tsEslint.configs.stylisticTypeChecked,
-
-  {
+    files,
+    plugins: { js, n: node },
+    extends: ["js/recommended", "n/recommended"],
     languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
       globals: {
         ...globals.nodeBuiltin,
       },
     },
   },
-  nodePlugin.configs["flat/recommended"],
+
+  // Rules enabled by this config in addition to recommended: https://typescript-eslint.io/rules/?=xrecommended-strict
+  // Replace this with tsEslint.configs.recommendedTypeChecked, if you want to include recommended rules only
+  ts.configs.strictTypeChecked,
+
+  // Rules enabled by this config: https://typescript-eslint.io/rules/?=stylistic
+  // Remove this if you don't want to include stylistic rules
+  ts.configs.stylisticTypeChecked,
+
   {
+    files,
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     rules: {
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-import-type-side-effects": "error",
@@ -45,7 +55,7 @@ export default tsEslint.config(
   },
   {
     files: ["**/*.mjs", "**/*.cjs", "**/*.js"],
-    ...tsEslint.configs.disableTypeChecked,
+    extends: [ts.configs.disableTypeChecked],
   },
   prettier,
-);
+]);
