@@ -172,6 +172,11 @@ export const create = async ({ projectName, projectPath, packageManager }) => {
   await writeFile(dockerfilePath, dockerfile);
   await normalizeLineEndings(dockerfilePath);
 
+  if (pmName === "npm") {
+    const npmrcPath = pathJoin(projectPath, ".npmrc");
+    await writeFile(npmrcPath, `min-release-age=1${EOL}`);
+  }
+
   console.log();
   `
 Project created!
