@@ -1,9 +1,10 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import nodePlugin from "eslint-plugin-n";
+import { defineConfig, globalIgnores } from "eslint/config";
 
-export default [
-  { ignores: ["template/*"] },
+export default defineConfig([
+  globalIgnores(["template/"]),
   { languageOptions: { globals: globals.node } },
   pluginJs.configs.recommended,
   nodePlugin.configs["flat/recommended"],
@@ -17,4 +18,4 @@ export default [
       "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     },
   },
-];
+]);
