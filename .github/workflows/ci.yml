@@ -18,9 +18,9 @@ jobs:
       matrix:
         node-version: ["24", "25"]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}.x
           cache: "npm"
@@ -39,14 +39,14 @@ jobs:
         package-manager: ["npm", "yarn", "pnpm"]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         if: matrix.package-manager == 'pnpm'
         with:
           version: "10"
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24.x
           cache: "npm"
@@ -83,14 +83,14 @@ jobs:
     env:
       NODE_DEBUG: create-ts-node
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
         name: Install pnpm
         if: matrix.package-manager == 'pnpm'
         with:
           version: "10"
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}.x
       - run: ${{ matrix.package-manager }} install
